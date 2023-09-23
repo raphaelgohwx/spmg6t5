@@ -1,7 +1,7 @@
 ''' run this file only if you want to delete and redo database'''
 
 import mysql.connector
-import creds
+import backend.creds as creds
 
 # establish connection to database
 def create_connection():
