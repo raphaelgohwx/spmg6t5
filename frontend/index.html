@@ -6,11 +6,65 @@
   <link rel="icon" href="/favicon.ico" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Welcome to Vuetify 3</title>
+  <!-- jQuery cdn -->
+  <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+  <!-- Add Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
-  <div id="app"></div>
-  <script type="module" src="/src/main.js"></script>
+  <div id="app">
+    <h1>hello world</h1>
+    <button type="button" class="btn btn-primary" onclick="getStaffRoles()" >something here</button>
+  </div>
+
+  <!-- Role Listings will only be populated after clicking the button -->
+  <div id="roleListings">
+  </div>
+
+  <!-- <script type="module" src="/src/main.js"></script> -->
+  <script>
+    function getStaffRoles(){
+
+      $(async () => {
+        serviceURL = "http://127.0.0.1:5001/getStaffRoles"
+        
+        const response = await fetch(serviceURL, {
+          method: "GET",
+        });
+
+        try{
+          const result = await response.json();
+
+          if (response.ok){
+            // console.log(result)
+            
+            let html = "";
+            for (let i = 0; i<result.length; i++){
+              html+= 
+              `<div style="background-color: rgb(255, 245, 224); height: 100px; width: 500px; margin-top: 10px;">`
+              
+              html+= "<h2>" + result[i].Role_Name + "</h2>"
+              html+= "<h5>" + result[i].Role_Description + "</h5>"
+              html+= "<h6> Role Deadline: " + result[i].Date_Closed + "</h6>"
+                
+              html+= `</div>`
+            }
+            document.getElementById("roleListings").innerHTML=html;
+          }
+        }catch{
+          console.log("something went wrong")
+        }
+
+      })
+    
+    }
+  </script>
+
+
+
+
 </body>
 
 </html>
