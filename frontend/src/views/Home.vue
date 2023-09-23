@@ -1,7 +1,21 @@
 <template>
-  <HelloWorld />
+  <div>
+
+    <!-- Include the LJPSNavigation component -->
+    <navbar/>
+  </div>
 </template>
 
-<script setup>
-  import HelloWorld from '@/components/HelloWorld.vue'
+<script>
+import navbar from '@/components/navbar.vue'; // Import the component
+
+export default {
+  components: {
+    navbar, // Register the component
+  },
+};
 </script>
+
+<style scoped>
+/* Add your component-specific styles here */
+</style>
