@@ -1,17 +1,16 @@
 <template>
   <div>
 
-    <!-- Include the LJPSNavigation component -->
     <navbar/>
   </div>
 </template>
 
 <script>
-import navbar from '@/components/navbar.vue'; // Import the component
+import navbar from '@/components/navbar.vue'; 
 
 export default {
   components: {
-    navbar, // Register the component
+    navbar, 
   },
 };
 </script>

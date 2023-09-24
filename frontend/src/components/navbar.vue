@@ -8,9 +8,6 @@
 
       <v-spacer></v-spacer>
 
-      <!-- <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn> -->
 
       <v-text-field
         dense
@@ -24,7 +21,7 @@
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
-
+      {{ this.appStore.apiURL }}
       <!-- Nav bar extensions -->
       <template v-slot:extension>
         <v-tabs
@@ -81,7 +78,12 @@
 </template>
 
 <script>
+  import {useAppStore} from "@/store/app"
   export default {
+    setup(){
+      const appStore = useAppStore();
+      return {appStore}
+    },
     data () {
       return {
         tab: null,
@@ -102,6 +104,9 @@
         handleItemClick(item){
           console.log('Clicked item: ${item.title}');
         },
+        async getAllStaffRole(){
+          await this.appStore.getStaffRoles()
+        }
       },
     };
 </script>
