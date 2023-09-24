@@ -21,7 +21,7 @@
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
       </v-btn>
-      {{ this.appStore.apiURL }}
+      
       <!-- Nav bar extensions -->
       <template v-slot:extension>
         <v-tabs
