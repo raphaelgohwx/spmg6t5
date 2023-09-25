@@ -60,6 +60,7 @@
             </v-list-item>
           </v-list>
         </v-menu>
+        
       </template>
     </v-toolbar>
 
@@ -74,6 +75,8 @@
         </v-card>
       </v-window-item>
     </v-window>
+
+    
   </v-card>
 </template>
 
