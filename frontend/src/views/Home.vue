@@ -1,7 +1,7 @@
 <template>
   <div>
-
-    <navbar/>
+  <navbar/>
+  <p>Please Log In to Access</p>
   </div>
 </template>
 
@@ -16,5 +16,4 @@ export default {
 </script>
 
 <style scoped>
-/* Add your component-specific styles here */
 </style>

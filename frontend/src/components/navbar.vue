@@ -51,29 +51,13 @@
             </v-btn>
           </template>
           <v-list>
-            <v-list-item
-              v-for="(item, i) in buttonItems"
-              :key="i"
-              @click="handleItemClick(item)"
-            >
-              <v-list-item-title>{{item.title }}</v-list-item-title>
-            </v-list-item>
+            <v-list-item @click="navigateToRole('staff')">Staff</v-list-item>
+              <v-list-item @click="navigateToRole('hr')">HR</v-list-item>
+              <v-list-item @click="navigateToRole('manager')">Manager</v-list-item>
           </v-list>
         </v-menu>
       </template>
     </v-toolbar>
-
-    <v-window v-model="tab">
-      <v-window-item
-        v-for="(item,index) in items"
-        :key="index"
-        :value="index"
-      >
-        <v-card flat>
-          <v-card-text v-text="item.text"></v-card-text>
-        </v-card>
-      </v-window-item>
-    </v-window>
   </v-card>
 </template>
 
@@ -82,22 +66,17 @@
   export default {
     setup(){
       const appStore = useAppStore();
-      return {appStore}
+      return {appStore};
     },
     data () {
       return {
         tab: null,
         items: [
-          { label: 'Learning Journeys', text: 'Please Log In to view any Learning Journeys.' },
-          { label: 'Skills', text: 'Please Log In to view Skills.' },
-          { label: 'Courses', text: 'Please Log In to view Courses.' },
-          { label: 'Jobs', text: 'Please Log In to view Jobs.' },
+          { label: 'Learning Journeys',},
+          { label: 'Skills',},
+          { label: 'Courses',},
+          { label: 'Jobs',},
         ],
-        buttonItems: [
-          { title: 'Staff' },
-          { title: 'HR' },
-          { title: 'Manager' },
-          ],
         };
       },
       methods: {
@@ -106,7 +85,10 @@
         },
         async getAllStaffRole(){
           await this.appStore.getStaffRoles()
-        }
+        },
+        navigateToRole(role) {
+          this.$router.push({ name: role });
+        },
       },
     };
 </script>

@@ -16,6 +16,21 @@ const routes = [
       },
     ],
   },
+  {
+    path:'/staff',
+    component: () => import('@/views/staff.vue'),
+    name:'staff'
+  },
+  {
+    path:'/hr',
+    component: () => import('@/views/hr.vue'),
+    name:'hr'
+  },
+  {
+    path:'/manager',
+    component: () => import('@/views/manager.vue'),
+    name:'manager'
+  },
 ]
 
 const router = createRouter({
