@@ -56,6 +56,7 @@
               <v-list-item @click="navigateToRole('manager')">Manager</v-list-item>
           </v-list>
         </v-menu>
+        
       </template>
     </v-toolbar>
   </v-card>
