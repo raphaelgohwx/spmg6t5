@@ -1,8 +1,14 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 import mysql.connector
 import creds
+
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(creds.user, creds.password, creds.host, creds.database)
+
+db = SQLAlchemy(app)
 
 # establish connection to database
 def create_connection():
@@ -16,7 +22,7 @@ def create_connection():
 
 connection = create_connection()
 
-app = Flask(__name__)
+# app = Flask(__name__)
 CORS(app)
 
 @app.route("/getStaffRoles")
