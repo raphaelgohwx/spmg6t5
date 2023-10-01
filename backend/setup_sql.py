@@ -257,7 +257,7 @@ insert_data_role_skill("IT Team", "Critical Thinking")
 insert_data_role_skill("IT Team", "Teamwork")
 
 '''inserting data into Role_Listing table'''
-insert_data_role_listing(1, "IT Team", "2023-09-10", "IT Team description is here")
+insert_data_role_listing(1, "IT Team", "2023-11-10", "IT Team description is here")
 insert_data_role_listing(2, "Sales Manager", "2023-09-10", "Sales Manager description is here")
 insert_data_role_listing(3, "Consultant", "2023-09-10", "Consultant description is here")
 
