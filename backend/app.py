@@ -64,6 +64,21 @@ class Staff(db.Model):
             json_list.append(row[0])
         return json_list
     
+    def retrieve_all_staff(self):
+        cursor = connection.cursor()
+        cursor.execute("SELECT Staff_ID, Staff_Fname, Staff_Lname, Access_Rights FROM Staff")
+        rows = cursor.fetchall()
+        cursor.close()
+
+        row_dict = {}
+        for row in rows:
+            staff_list = []
+            staff_list.append(row[1])
+            staff_list.append(row[2])
+            staff_list.append(row[3])
+            row_dict[row[0]] = staff_list
+        return row_dict
+    
     def create_staff(self):
         if (self.Staff_ID) in Staff.retrieve_all_Staff_ID(self):
             return False
@@ -217,12 +232,15 @@ class Role_Listing(db.Model):
 
 @app.route("/getAllRoleListings")
 def get_all_role_listings():
-    return Role_Listing.retrieve_all_role_listings()
+    return Role_Listing.retrieve_all_role_listings(self=Role_Listing)
 
 @app.route("/getActiveRoleListings")
 def get_active_role_listings():
-    return Role_Listing.retrieve_active_role_listings()
+    return Role_Listing.retrieve_active_role_listings(self=Role_Listing)
 
+@app.route("/getAllStaffName")
+def get_all_staff_name():
+    return Staff.retrieve_all_staff(self=Staff)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
