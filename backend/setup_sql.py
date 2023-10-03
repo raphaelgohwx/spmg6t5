@@ -49,7 +49,7 @@ def create_role_skill_table():
 
 def create_role_listing_table():
     cursor = connection.cursor()
-    query = "CREATE TABLE Role_Listing (Role_Listing_ID int NOT NULL PRIMARY KEY, Role_Name VARCHAR(20) NOT NULL, Date_Closed DATE NOT NULL, Role_Description VARCHAR(100) NOT NULL, FOREIGN KEY (Role_Name) REFERENCES Role_Skill (Role_Name))"
+    query = "CREATE TABLE Role_Listing (Role_Listing_ID int NOT NULL PRIMARY KEY, Role_Name VARCHAR(20) NOT NULL, Date_Closed DATE NOT NULL, Role_Description VARCHAR(100) NOT NULL, Dept VARCHAR(50) NOT NULL, FOREIGN KEY (Role_Name) REFERENCES Role_Skill (Role_Name))"
     cursor.execute(query)
     connection.commit()
     cursor.close()
@@ -84,10 +84,10 @@ def insert_data_role_skill(Role_Name, Skill_Name):
     connection.commit()
     cursor.close()
 
-def insert_data_role_listing(Role_Listing_ID, Role_Name, Date_Closed, Role_Description):
+def insert_data_role_listing(Role_Listing_ID, Role_Name, Date_Closed, Role_Description, Dept):
     cursor = connection.cursor()
-    query = "INSERT INTO Role_Listing (Role_Listing_ID, Role_Name, Date_Closed, Role_Description) VALUES (%s, %s, %s, %s)"
-    cursor.execute(query, (Role_Listing_ID, Role_Name, Date_Closed, Role_Description))
+    query = "INSERT INTO Role_Listing (Role_Listing_ID, Role_Name, Date_Closed, Role_Description, Dept) VALUES (%s, %s, %s, %s, %s)"
+    cursor.execute(query, (Role_Listing_ID, Role_Name, Date_Closed, Role_Description, Dept))
     connection.commit()
     cursor.close()
 
@@ -257,9 +257,9 @@ insert_data_role_skill("IT Team", "Critical Thinking")
 insert_data_role_skill("IT Team", "Teamwork")
 
 '''inserting data into Role_Listing table'''
-insert_data_role_listing(1, "IT Team", "2023-11-10", "IT Team description is here")
-insert_data_role_listing(2, "Sales Manager", "2023-09-10", "Sales Manager description is here")
-insert_data_role_listing(3, "Consultant", "2023-09-10", "Consultant description is here")
+insert_data_role_listing(1, "IT Team", "2023-11-10", "IT Team description is here", "IT")
+insert_data_role_listing(2, "Sales Manager", "2023-09-10", "Sales Manager description is here", "Sales")
+insert_data_role_listing(3, "Consultant", "2023-09-10", "Consultant description is here", "Consultancy")
 
 '''inserting data into Role_Application table'''
 insert_data_role_application(1,3)
