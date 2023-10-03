@@ -127,12 +127,14 @@ class Role_Listing(db.Model):
     Role_Name = db.Column(db.String(20) , nullable=False)
     Date_Closed = db.Column(db.DateTime, nullable=False)
     Role_Description = db.Column(db.String(100) , nullable=False)
+    Dept = db.Column(db.String(50) , nullable=False)
 
-    def __init__(self, Role_Listing_ID, Role_Name, Date_Closed, Role_Description):
+    def __init__(self, Role_Listing_ID, Role_Name, Date_Closed, Role_Description, Dept):
         self.Role_Listing_ID = Role_Listing_ID
         self.Role_Name = Role_Name
         self.Date_Closed = Date_Closed
         self.Role_Description = Role_Description
+        self.Dept = Dept
 
     # CRUD functions for Role_Listing table
     def is_not_past_date(self):
@@ -164,7 +166,7 @@ class Role_Listing(db.Model):
             return False
         else:
             cursor = connection.cursor()
-            cursor.execute("INSERT INTO Role_Listing VALUES (%s, %s, %s, %s)", (self.Role_Listing_ID, self.Role_Name, self.Date_Closed, self.Role_Description))
+            cursor.execute("INSERT INTO Role_Listing VALUES (%s, %s, %s, %s, %s)", (self.Role_Listing_ID, self.Role_Name, self.Date_Closed, self.Role_Description, self.Dept))
             connection.commit()
             cursor.close()
             return True
@@ -182,13 +184,13 @@ class Role_Listing(db.Model):
     
     # boolean logic for Role_Listing table
     def role_listing_is_not_empty(self):
-        if (self.Role_Listing_ID == "" or self.Role_Name == "" or self.Date_Closed == "" or self.Role_Description == ""):
+        if (self.Role_Listing_ID == "" or self.Role_Name == "" or self.Date_Closed == "" or self.Role_Description == "" or self.Dept == ""):
             return False
         else:
             return True
         
     def role_listing_is_not_null(self):
-        if (self.Role_Listing_ID == None or self.Role_Name == None or self.Date_Closed == None or self.Role_Description == None):
+        if (self.Role_Listing_ID == None or self.Role_Name == None or self.Date_Closed == None or self.Role_Description == None or self.Dept == None):
             return False
         else:
             return True
