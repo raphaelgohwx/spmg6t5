@@ -1,8 +1,18 @@
 import axios from 'axios';
 
-async function getStaffRoles() {
+async function getAllRoleListings() {
     try {
-        const res = await axios.get("http://127.0.0.1:5001/getStaffRoles")
+        const res = await axios.get("http://127.0.0.1:5001/getAllRoleListings")
+        return res
+    }
+    catch (err){
+        console.log(err.message)
+    }
+}
+
+async function getActiveRoleListings() {
+    try {
+        const res = await axios.get("http://127.0.0.1:5001/getActiveRoleListings")
         return res
     }
     catch (err){
@@ -11,6 +21,7 @@ async function getStaffRoles() {
 }
 
 export default {
-    getStaffRoles: getStaffRoles
+    getAllRoleListings: getAllRoleListings,
+    getActiveRoleListings: getActiveRoleListings
 }
 

@@ -10,6 +10,7 @@
         :name=" role.Role_Name "
         :description=" role.Role_Description "
         :expiry=" role.Date_Closed.substr(0,16) "
+        :department="role.Dept"
       />
     </template>
   </div>
@@ -35,9 +36,10 @@ export default {
     RoleListingCard
   },
   created() {
-    ApiService.getStaffRoles()
+    ApiService.getActiveRoleListings()
     .then(res => {
       this.staff_roles = res.data
+      console.log(this.staff_roles)
     })
   }
 };
