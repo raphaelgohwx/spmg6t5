@@ -209,11 +209,7 @@ class Role_Listing(db.Model):
             row_dict["Role_Name"] = row[1]
             row_dict["Date_Closed"] = row[2]
             row_dict["Role_Description"] = row[3]
-<<<<<<< Updated upstream
             row_dict["Dept"] = row[4]
-=======
-            row_dict["Department"] = row[4]
->>>>>>> Stashed changes
             json_list.append(row_dict)
         return json_list
     
@@ -233,11 +229,7 @@ class Role_Listing(db.Model):
                 row_dict["Role_Name"] = row[1]
                 row_dict["Date_Closed"] = row[2]
                 row_dict["Role_Description"] = row[3]
-<<<<<<< Updated upstream
                 row_dict["Dept"] = row[4]
-=======
-                row_dict["Department"] = row[4]
->>>>>>> Stashed changes
                 json_list.append(row_dict)
         return json_list
         
