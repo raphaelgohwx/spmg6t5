@@ -20,8 +20,19 @@ async function getActiveRoleListings() {
     }
 }
 
+async function getAllStaffName() {
+    try {
+        const res = await axios.get("http://127.0.0.1:5001/getAllStaffName")
+        return res
+    }
+    catch (err){
+        console.log(err.message)
+    }
+}
+
 export default {
     getAllRoleListings: getAllRoleListings,
-    getActiveRoleListings: getActiveRoleListings
+    getActiveRoleListings: getActiveRoleListings,
+    getAllStaffName, getAllStaffName
 }
 
