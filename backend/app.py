@@ -159,17 +159,17 @@ class Role_Listing(db.Model):
     
     def create_Role_Listing(self):
         if (self.Role_Listing_ID) in Role_Listing.retrieve_all_role_listing_ID(self):
-            return False
+            return "Error: Role Listing ID already exists."
         elif self.role_listing_is_not_empty() == False or self.role_listing_is_not_null() == False:
-            return False
+            return "Error: One or more fields are empty."
         elif self.is_not_past_date() == False:
-            return False
+            return "Error: Date closed is in the past."
         else:
             cursor = connection.cursor()
             cursor.execute("INSERT INTO Role_Listing VALUES (%s, %s, %s, %s, %s)", (self.Role_Listing_ID, self.Role_Name, self.Date_Closed, self.Role_Description, self.Dept))
             connection.commit()
             cursor.close()
-            return True
+            return "Success"
 
         
     def delete_Role_Listing(self):
@@ -209,7 +209,11 @@ class Role_Listing(db.Model):
             row_dict["Role_Name"] = row[1]
             row_dict["Date_Closed"] = row[2]
             row_dict["Role_Description"] = row[3]
+<<<<<<< Updated upstream
             row_dict["Dept"] = row[4]
+=======
+            row_dict["Department"] = row[4]
+>>>>>>> Stashed changes
             json_list.append(row_dict)
         return json_list
     
@@ -229,7 +233,11 @@ class Role_Listing(db.Model):
                 row_dict["Role_Name"] = row[1]
                 row_dict["Date_Closed"] = row[2]
                 row_dict["Role_Description"] = row[3]
+<<<<<<< Updated upstream
                 row_dict["Dept"] = row[4]
+=======
+                row_dict["Department"] = row[4]
+>>>>>>> Stashed changes
                 json_list.append(row_dict)
         return json_list
         
@@ -245,6 +253,13 @@ def get_active_role_listings():
 @app.route("/getAllStaffName")
 def get_all_staff_name():
     return Staff.retrieve_all_staff(self=Staff)
+
+@app.route("/createRoleListing", methods=["POST"])
+def createRoleListing():
+    data = request.get_json()
+    newListing = Role_Listing(data["Role_Listing_ID"], data["Role_Name"], data["Date_Closed"], data["Role_Description"], data["Dept"])
+    return newListing.create_Role_Listing()
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
