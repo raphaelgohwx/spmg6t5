@@ -165,6 +165,7 @@ class Role_Listing(db.Model):
         elif self.is_not_past_date() == False:
             return "Error: Date closed is in the past."
         else:
+            
             cursor = connection.cursor()
             cursor.execute("INSERT INTO Role_Listing VALUES (%s, %s, %s, %s, %s)", (self.Role_Listing_ID, self.Role_Name, self.Date_Closed, self.Role_Description, self.Dept))
             connection.commit()
@@ -250,6 +251,7 @@ def get_all_staff_name():
 def createRoleListing():
     data = request.get_json()
     newListing = Role_Listing(data["Role_Listing_ID"], data["Role_Name"], data["Date_Closed"], data["Role_Description"], data["Dept"])
+
     return newListing.create_Role_Listing()
 
 
