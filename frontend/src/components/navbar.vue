@@ -48,7 +48,7 @@
           <v-list>
             <template v-for="staff in staff_list">
               <!-- List item onclick to state -->
-              <v-list-item>{{ staff[0] + " " + staff[1]}} | {{ staff[2] }}</v-list-item>
+              <v-list-item @click="navigateToRole(staff[2])">{{ staff[0] + " " + staff[1]}} | {{ staff[2] }}</v-list-item>
             </template>
             
             <!-- <v-list-item @click="navigateToRole('staff')">Staff</v-list-item>
@@ -93,7 +93,7 @@ export default {
     //   await this.appStore.getStaffRoles()
     // },
     navigateToRole(role) {
-      this.$router.push({ name: role });
+      this.$router.push({ name: role.toLowerCase() });
     },
     getAllStaffName() {
       ApiService.getAllStaffName().then((res) => {
