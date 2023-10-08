@@ -36,6 +36,11 @@ const routes = [
     component: () => import('@/views/RoleCreation.vue'),
     name:'roleCreation'
   },
+  {
+    path:'/updateRole',
+    component: () => import('@/views/UpdateRole.vue'),
+    name:'updateRole'
+  },
 ]
 
 const router = createRouter({
