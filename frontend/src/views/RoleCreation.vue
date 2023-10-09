@@ -4,30 +4,44 @@
     </div>
       <div>
       <h2>Create New Role Listing</h2>
-      <form @submit.prevent="addRoleListing">
+      <form @submit.prevent="addRoleListing" class="role-listing-form">
         <div class="form-group">
           <label for="roleName">Role Name:</label>
           <input type="text" id="roleName" v-model="roleName" required />
+            <span v-if="roleName.length > 20 || roleName.length === 0" class="error">
+              Note: Role Name must be between 1 and 20 characters.
+            </span>
         </div>
-        <!-- <div class="form-group">
-          <label for="requiredSkill">Skill Required:</label>
-          <input type="text" id="requiredSkill" v-model="requiredSkill" required />
-        </div> -->
         <div class="form-group">
           <label for="roleDescription">Description:</label>
-          <input type="text" id="roleDescription" v-model="roleDescription" required />
+          <textarea id="roleDescription" v-model="roleDescription" required @input="resizeTextarea" />
+            <span v-if="roleDescription.length > 100 || roleDescription.length === 0" class="error">
+              Note: Description must be between 1 and 100 characters.
+            </span>
         </div>
         <div class="form-group">
           <label for="department">Department:</label>
-          <input type="text" id="department" v-model="department" required />
+            <select id="department" v-model="department" required>
+              <option :value="null" disabled selected>Select Dept</option>
+
+              <!-- Add more departments here if there's changes in database -->
+              <option value="IT">IT</option>
+              <option value="Sales">Sales</option>
+              <option value="Consultancy">Consultancy</option>
+            </select>
+            <span v-if="department.length == 0" class="error">
+              Note: Please select a department.
+            </span>
         </div>
         <div class="form-group">
           <label for="closingDate">Closing Date:</label>
           <input type="date" id="closingDate" v-model="closingDate" required />
+          <span v-if="!this.closingDateValidation()" class="error">
+              Note: Please select a closing date in the future.
+            </span>
         </div>
         <button type="submit" class="btn btn-primary">Create Role Listing</button>    
       </form>
-      <v-btn @click='getAllListings()'>Test get all listings</v-btn>
     </div>
   </template>
   
@@ -41,9 +55,7 @@
     },
     data() {
       return {
-        // need to generate a rolelisting ID, currently the msql id is not auto incrementing so we create on our own
         roleName: "",
-        //requiredSkill: "",
         roleDescription: "",
         department: "",
         closingDate: "",
@@ -53,40 +65,45 @@
     // Page title
     document.title = "Create New Role Listing";
     },
+    
     methods: {
-       async addRoleListing() {
-          // Check if the role listing already exists
-          if (this.checkIfRoleListingExists()) {
-            alert("Role listing already exists!");
-            return;
-          }
+      // For visuals only
+      resizeTextarea() {
+        const textarea = document.getElementById('roleDescription');
+        textarea.style.height = 'auto'; // Reset the height to auto to calculate the actual content height
+        textarea.style.height = textarea.scrollHeight + 'px'; // Set the height to match the content height
+      },
 
-          const roleListingId = 99; // need to generate automatically
+      // checking if selected closingDate is in the future
+    closingDateValidation(){
+        const dateToday = new Date();
+        const dateSelected = new Date(this.closingDate);
+        return dateToday <= dateSelected;
+      },
+      
+       async addRoleListing() {
+
           // Create a new role listing object
           const newRoleListing = {
-            Role_Listing_ID: roleListingId,
+            // Role_Listing_ID: roleListingId, // this is created in app.py
             Role_Name: this.roleName,
-            // skillRequired: this.requiredSkill,
             Role_Description: this.roleDescription,
             Dept: this.department,
             Date_Closed: this.closingDate,
           };
 
-    
-          ///// need to connect to backend /////
-          // Need to send newRoleListing to the backend
           console.log("New Role Listing:", newRoleListing);
           
           try {
-      // Make a POST request to your Flask backend to create the role listing
-          const response = await axios.post('http://localhost:5001/createRoleListing', newRoleListing
-          )
-      // Handle the response here, you can show a success message or handle errors
-      if (response.status === 200) {
-        alert("Role listing created successfully!");
-      } else {
-        alert("Failed to create role listing");
-          }
+          // Make a POST request to your Flask backend to create the role listing
+              const response = await axios.post('http://localhost:5001/createRoleListing', newRoleListing
+              )
+          // Handle the response here, you can show a success message or handle errors
+          if (response.status === 200) {
+            alert("Role listing created successfully!");
+          } else {
+            alert("Failed to create role listing");
+              }
         } catch (error) {
           console.error("Error creating role listing:", error);
           alert("Failed to create role listing");
@@ -94,45 +111,14 @@
 
       // Clear the form fields
       this.roleName = "";
-      this.requiredSkill = "";
+      this.roleDescription = "";
       this.department = "";
       this.closingDate = "";
       },
 
-      checkIfRoleListingExists() {
-        ///// need to connect to backend ///// //Alr done in app.py (backend)
-        // Check with backend if the role listing already exists
-        const existingRoleListings = [
-          // Example role listings from the backend
-          {
-            name: "Developer",
-            skillRequired: "Programming",
-            department: "Engineering",
-            closingDate: "2023-10-04",
-
-          },
-          {
-            name: "Designer",
-            skillRequired: "Graphic Design",
-            department: "Creative",
-            closingDate: "07-08-2023",
-          },
-        ];
-  
-        ///// need to connect to backend /////
-        return existingRoleListings.some(
-          (listing) =>
-            listing.name === this.roleName &&
-            listing.requiredSkill === this.requiredSkill &&
-            listing.department === this.department &&
-            listing.closingDate === this.closingDate
-        );
-      },
-
-      async getAllListings() {
-          const response = await axios.get('http://localhost:5001/getAllRoleListings');
-          console.log(response.data);
-      }
+      // deleted checkIfRoleListingExists() function because logic is in app.py (backend)
+      // deleted async getAllListings() method because logic is in app.py (backend), just run http://localhost:5001/getAllRoleListings in browser to get all listings
+      // deleted checkIfRoleListingExists() function because logic is in app.py (backend)
     },
   };
 
@@ -143,11 +129,12 @@
 
 h2{
   margin-top: 10px;
-  margin-bottom: 20px;
-  margin-left: 10px;
+  margin-bottom: 15px;
+  text-align:center;
 }
+
 .role-listing-form {
-  max-width: 400px; 
+  max-width: 800px; 
   margin: 0 auto; /* Center the form horizontally */
   padding: 20px;
   border: 1px solid #ccc;
@@ -167,10 +154,32 @@ label {
 }
 
 input[type="text"] {
-  width: 30%;
+  width: 40%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
+}
+select {
+  width: 40%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+input[type="date"]{
+  width: 40%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+textarea {
+  width: 40%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  height:auto; 
+  resize: none; /* Allow vertical resizing */
+  overflow-y: hidden; /* Hide vertical scrollbar */
 }
 
 .btn {
@@ -180,6 +189,7 @@ input[type="text"] {
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
+  margin-left: 10px;
 }
 
 .btn-primary {
@@ -189,5 +199,9 @@ input[type="text"] {
 .btn-primary:hover {
   background-color: #0056b3; 
   /* darker when you hover over it */
+}
+
+.error{
+  color: #0056b3; 
 }
 </style>

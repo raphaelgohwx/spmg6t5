@@ -233,7 +233,19 @@ class Role_Listing(db.Model):
                 row_dict["Dept"] = row[4]
                 json_list.append(row_dict)
         return json_list
-        
+    
+    # retrieve highest roleListingID to be used for creating new role listings
+    def get_max_role_listing_id():
+        cursor = connection.cursor()
+        cursor.execute("select Role_Listing_ID from Role_Listing")
+        rows = cursor.fetchall()
+        cursor.close()
+
+        max_id = 0
+        for row in rows:
+            if row[0] > max_id:
+                max_id = row[0] 
+        return max_id 
 
 @app.route("/getAllRoleListings")
 def get_all_role_listings():
@@ -249,8 +261,11 @@ def get_all_staff_name():
 
 @app.route("/createRoleListing", methods=["POST"])
 def createRoleListing():
+    # Get the next available Role_Listing_ID
+    next_id = Role_Listing.get_max_role_listing_id() + 1
+
     data = request.get_json()
-    newListing = Role_Listing(data["Role_Listing_ID"], data["Role_Name"], data["Date_Closed"], data["Role_Description"], data["Dept"])
+    newListing = Role_Listing(next_id, data["Role_Name"], data["Date_Closed"], data["Role_Description"], data["Dept"])
 
     return newListing.create_Role_Listing()
 
