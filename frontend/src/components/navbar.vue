@@ -45,7 +45,7 @@
               Login
             </v-btn>
           </template>
-          <v-list>
+          <v-list v-model="username">
             <template v-for="staff in staff_list">
               <!-- List item onclick to state -->
               <v-list-item @click="navigateToRole(staff[2])">{{ staff[0] + " " + staff[1]}} | {{ staff[2] }}</v-list-item>
@@ -75,6 +75,7 @@ export default {
   },
   data() {
     return {
+      username: "",
       staff_list: [],
       tab: null,
       items: [
@@ -86,6 +87,20 @@ export default {
     };
   },
   methods: {
+    async login() {
+      try {
+        await this.appStore.login(this.username);
+        if (this.appStore.loggedInUser !== null) {
+          console.log("Login successful");
+        }
+        else {
+          console.log("Login failed");
+        }
+      }
+      catch (error) {
+        console.log('Login failed: ', error);
+      }
+    },
     handleItemClick(item) {
       console.log("Clicked item: ${item.title}");
     },
@@ -93,6 +108,7 @@ export default {
     //   await this.appStore.getStaffRoles()
     // },
     navigateToRole(role) {
+      this.appStore.saveResponsetoStore(role);
       this.$router.push({ name: role.toLowerCase() });
     },
     getAllStaffName() {
