@@ -87,20 +87,6 @@ export default {
     };
   },
   methods: {
-    async login() {
-      try {
-        await this.appStore.login(this.username);
-        if (this.appStore.loggedInUser !== null) {
-          console.log("Login successful");
-        }
-        else {
-          console.log("Login failed");
-        }
-      }
-      catch (error) {
-        console.log('Login failed: ', error);
-      }
-    },
     handleItemClick(item) {
       console.log("Clicked item: ${item.title}");
     },
