@@ -17,6 +17,10 @@
       <v-btn @click='createListing()'>Create Listing</v-btn>
       <v-btn @click='getAllListings()'>Test get all listings</v-btn>
     </div>
+    <div>
+    <!-- Button to create new role listing -->
+    <RouterLink to="/RoleCreation"><button class="rolebtn">Create a Role</button></RouterLink>
+    </div>
   </template>
   
   <script>
@@ -73,7 +77,22 @@
   };
 
   </script>
- 
+
+<style>
+.rolebtn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 10px;
+}
+
+.rolebtn:hover {
+  background-color: #0056b3; /* darker when you hover over it */
+}
+</style>
   
   
   
