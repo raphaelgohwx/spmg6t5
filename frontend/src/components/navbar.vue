@@ -95,7 +95,7 @@ export default {
     // },
     navigateToRole(role) {
       this.appStore.saveResponsetoStore(role);
-      this.$router.push({ name: role.toLowerCase() });
+      // this.$router.push({ name: role.toLowerCase() });
     },
     getAllStaffName() {
       ApiService.getAllStaffName().then((res) => {

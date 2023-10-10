@@ -75,10 +75,16 @@ actions: {
     if (user) {
       this.loggedInUser = JSON.parse(user);
     }
+    return user
   },
   logout() {
     this.loggedInUser = null;
     localStorage.removeItem("loggedInUser");
+  }
+},
+getters: {
+  getCurrentUser() {
+    return this.loggedInUser;
   }
 }
 })
