@@ -7,9 +7,12 @@
       <form @submit.prevent="addRoleListing" class="role-listing-form">
         <div class="form-group">
           <label for="roleName">Role Name:</label>
-          <input type="text" id="roleName" v-model="roleName" required />
-            <span v-if="roleName.length > 20 || roleName.length === 0" class="error">
-              Note: Role Name must be between 1 and 20 characters.
+            <select id="roleName" v-model="roleName" required>
+              <option :value="null" disabled selected>Select Role</option>
+              <option v-for="role in roles" :key="role" :value="role">{{ role }}</option>
+            </select>
+            <span v-if="roleName.length == 0" class="error">
+              Note: Please select a role name.
             </span>
         </div>
         <div class="form-group">
@@ -23,11 +26,7 @@
           <label for="department">Department:</label>
             <select id="department" v-model="department" required>
               <option :value="null" disabled selected>Select Dept</option>
-
-              <!-- Add more departments here if there's changes in database -->
-              <option value="IT">IT</option>
-              <option value="Sales">Sales</option>
-              <option value="Consultancy">Consultancy</option>
+              <option v-for="dept in depts" :key="dept" :value="dept">{{ dept }}</option>
             </select>
             <span v-if="department.length == 0" class="error">
               Note: Please select a department.
@@ -59,11 +58,34 @@
         roleDescription: "",
         department: "",
         closingDate: "",
+        roles: ["Account Manager",
+                "Admin Team",
+                "Call Centre",
+                "Consultant",
+                "Developer",
+                "Finance Executive",
+                "Finance Manager",
+                "HR Team",
+                "IT Team",
+                "Junior Engineer",
+                "L&D Team",
+                "Operation Planning T",
+                "Sales Manager",
+                "Senior Engineer",
+                "Support Team"],
+        depts: [],
       };
     },
     mounted() {
     // Page title
     document.title = "Create New Role Listing";
+
+    /// If the backend connection is up, I can get all role names from the backend instead of hardcoding them for the dept dropdown
+    /// Once it is, just uncomment the following lines 85 and 107-116, and change the data above to roles: [] 
+    // this.getAllRoleNames(); 
+
+    // get all role departments for dropdown
+    this.getAllRoleDepts();
     },
     
     methods: {
@@ -81,6 +103,27 @@
         return dateToday <= dateSelected;
       },
       
+      // async getAllRoleNames(){
+      //   try {
+      //     const response = await axios.get('http://localhost:5001/getRoleNames')
+      //     this.roles = response.data;
+      //     console.log("Axios Response:", response); // Log the entire response
+      //     console.log("All roles:", this.roles);
+      //   } catch (error) {
+      //     console.error("Error getting all roles:", error);
+      //   }
+      // },
+      
+      async getAllRoleDepts(){
+        try {
+          const response = await axios.get('http://localhost:5001/getDeptNames')
+          this.depts = response.data;
+          // console.log("All departments:", this.depts);
+        } catch (error) {
+          console.error("Error getting all departments:", error);
+        }
+      },
+
        async addRoleListing() {
 
           // Create a new role listing object

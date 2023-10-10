@@ -119,6 +119,18 @@ class Staff(db.Model):
             return False
         else:
             return True
+        
+    # [for frontend] retrieve all dept names in staff table to send to role creation form for dropdown
+    def get_all_dept_names():
+        cursor = connection.cursor()
+        cursor.execute("select distinct Dept from Staff")
+        rows = cursor.fetchall()
+        cursor.close()
+
+        json_list = []
+        for row in rows:
+            json_list.append(row[0])
+        return json_list
 
 class Role_Listing(db.Model):
     __tablename__ = 'Role_Listing'
@@ -246,6 +258,40 @@ class Role_Listing(db.Model):
             if row[0] > max_id:
                 max_id = row[0] 
         return max_id 
+    
+    # [for frontend] retrieve all dept names in role_listing table to send to role creation form for dropdown
+    def get_all_dept_names():
+        cursor = connection.cursor()
+        cursor.execute("select distinct Dept from Role_Listing")
+        rows = cursor.fetchall()
+        cursor.close()
+
+        json_list = []
+        for row in rows:
+            json_list.append(row[0])
+        return json_list
+    
+# class Role_Skill(db.Model):
+#     __tablename__ = 'Role_Skill'
+
+#     Role_Name = db.Column(db.String(20) , nullable=False)
+#     Skill_Name = db.Column(db.String(50), nullable=False)
+
+#     def __init__(self, Role_Name, Skill_Name):
+#         self.Role_Name = Role_Name
+#         self.Skill_Name = Skill_Name
+
+#     # retrieve all role names in role_skill table to send to role creation form for dropdown
+#     def get_all_role_names():
+#         cursor = connection.cursor()
+#         cursor.execute("select distinct Role_Name from Role_Skill")
+#         rows = cursor.fetchall()
+#         cursor.close()
+
+#         json_list = []
+#         for row in rows:
+#             json_list.append(row[0])
+#         return json_list
 
 @app.route("/getAllRoleListings")
 def get_all_role_listings():
@@ -269,6 +315,20 @@ def createRoleListing():
 
     return newListing.create_Role_Listing()
 
+ # need to uncomment line 274-294 before running this
+# # [for frontend] get all role names from skill table for dropdown in role creation form
+# @app.route("/getRoleNames")
+# def get_role_names():
+#     return Role_Skill.get_all_role_names()
+
+# [for frontend] get all dept names from staff and role_listing table for dropdown in role creation form
+@app.route("/getDeptNames")
+def get_dept_names():
+    deptNames = Role_Listing.get_all_dept_names()
+    for dept in Staff.get_all_dept_names():
+        if dept not in deptNames:
+            deptNames.append(dept)
+    return jsonify(deptNames)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
