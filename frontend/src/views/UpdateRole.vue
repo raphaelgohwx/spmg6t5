@@ -6,6 +6,13 @@
       <h2>Update Role Listing</h2>
       <form @submit.prevent="updateRoleListing">
         <div class="form-group">
+          <label for="listingID">Listing ID:</label>
+          <select id="listingID" v-model="listingID" required>
+              <option :value="null" disabled selected>Select Role</option>
+              <option v-for="listing in listingIDList" :key="listing" :value="listing">{{ listing }}</option>
+            </select>
+        </div>
+        <div class="form-group">
           <label for="roleName">Role Name:</label>
           <input type="text" id="roleName" v-model="roleName" required />
         </div>
@@ -39,28 +46,48 @@
     data() {
       return {
         //fetch existing role listing data
+        listingID: "",
+        listingIDList: "",
         roleName: "",        
         roleDescription: "",   
         department: "",      
         closingDate: "",
+        depts: [],
+        roles: ["Account Manager",
+                "Admin Team",
+                "Call Centre",
+                "Consultant",
+                "Developer",
+                "Finance Executive",
+                "Finance Manager",
+                "HR Team",
+                "IT Team",
+                "Junior Engineer",
+                "L&D Team",
+                "Operation Planning T",
+                "Sales Manager",
+                "Senior Engineer",
+                "Support Team"],
       };
     },
     mounted() {
       // Fetch existing role listing data from the backend
       this.fetchRoleListingData();
+    
     },
     methods: {
       async fetchRoleListingData() {
         //API request to fetch the existing role listing data
         try {
-          const response = await axios.get('http://localhost:5001/getRoleListing');
+          const response = await axios.get('http://localhost:5001/getAllRoleListingIds');
           const roleListingData = response.data;
-  
+          this.listingIDList = roleListingData
+          
           // Update data properties with the fetched role listing data
-          this.roleName = roleListingData.name;
-          this.requiredSkill = roleListingData.skillRequired;
-          this.department = roleListingData.department;
-          this.closingDate = roleListingData.closingDate;
+          // this.roleName = roleListingData.name;
+          // this.requiredSkill = roleListingData.skillRequired;
+          // this.department = roleListingData.department;
+          // this.closingDate = roleListingData.closingDate;
         } catch (error) {
           console.error("Error fetching role listing data:", error);
         }
@@ -68,10 +95,11 @@
       async updateRoleListing() {
         // Create an object with updated role listing data
         const updatedRoleListing = {
-          name: this.roleName,
-          skillRequired: this.requiredSkill,
-          department: this.department,
-          closingDate: this.closingDate,
+          Role_Listing_ID: this.listingID,
+          Role_Name: this.roleName,
+          Role_Description: this.roleDescription,
+          Dept: this.department,
+          Date_Closed: this.closingDate,
         };
   
         // Send updated data to backend to update role listing
@@ -125,7 +153,12 @@ input[type="text"] {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
+select {
+  width: 40%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
 .btn {
   background-color: #007bff;
   color: #fff;

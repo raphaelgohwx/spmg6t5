@@ -270,7 +270,27 @@ class Role_Listing(db.Model):
         for row in rows:
             json_list.append(row[0])
         return json_list
+
+    def get_all_role_listing_id():
+        cursor = connection.cursor()
+        cursor.execute("select distinct Role_Listing_ID from Role_Listing order by Role_Listing_ID")
+        rows = cursor.fetchall()
+        cursor.close()
+
+        json_list = []
+        for row in rows:
+            json_list.append(row[0])
+        return json_list
     
+    def updateRoleListing(self):
+        if (self.Role_Listing_ID) in Role_Listing.retrieve_all_role_listing_ID(self):
+            cursor = connection.cursor(self)
+            cursor.execute("UPDATE Role_Listing SET Role_Name = %s, Date_Closed = %s, Role_Description = %s, Dept = %s WHERE Role_Listing_ID = %s", (self.Role_Name, self.Date_Closed, self.Role_Description, self.Dept, self.Role_Listing_ID))
+            connection.commit()
+            cursor.close()
+            return "Success"
+        else:
+            return "Listing does not exist"
 # class Role_Skill(db.Model):
 #     __tablename__ = 'Role_Skill'
 
@@ -329,6 +349,25 @@ def get_dept_names():
         if dept not in deptNames:
             deptNames.append(dept)
     return jsonify(deptNames)
+
+
+#functions for update role listing table
+@app.route("/getAllRoleListingIds/")
+def retrieve_all_role_listing_id():
+    return Role_Listing.get_all_role_listing_id()
+
+
+@app.route("/updateRoleListing", methods=["PUT"])
+def update_role_listing():
+    data = request.get_json()
+    role_listing_id = data["Role_Listing_ID"]
+    role_name = data["Role_Name"]
+    date_closed = data["Date_Closed"]
+    role_description = data["Role_Description"]
+    dept = data["Dept"]
+    newListing = Role_Listing(role_listing_id, role_name, date_closed, role_description, dept)
+    return newListing.updateRoleListing()
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
