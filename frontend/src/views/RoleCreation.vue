@@ -18,8 +18,11 @@
         <div class="form-group">
           <label for="roleDescription">Description:</label>
           <textarea id="roleDescription" v-model="roleDescription" required @input="resizeTextarea" />
-            <span v-if="roleDescription.length > 100 || roleDescription.length === 0" class="error">
+            <span v-if="roleDescription.length === 0" class="error">
               Note: Description must be between 1 and 100 characters.
+            </span>
+            <span v-if="roleDescription.length > 100" class="error">
+              Note: Description cannot be more than 100 characters long.
             </span>
         </div>
         <div class="form-group">
@@ -39,7 +42,7 @@
               Note: Please select a closing date in the future.
             </span>
         </div>
-        <button type="submit" class="btn btn-primary">Create Role Listing</button>    
+        <button type="submit" class="btn btn-primary" :disabled="formValidation()">Create Role Listing</button>    
       </form>
     </div>
   </template>
@@ -101,6 +104,12 @@
         const dateToday = new Date();
         const dateSelected = new Date(this.closingDate);
         return dateToday <= dateSelected;
+      },
+
+      // checking if any of the fields have error, to prevent form submission, hasErrors is true if any of the fields have error
+      formValidation() {
+        const hasErrors = this.roleName.length === 0 || this.roleDescription.length > 100 || this.roleDescription.length === 0 || this.department.length === 0 || !this.closingDateValidation();
+        return hasErrors;
       },
       
       // async getAllRoleNames(){
