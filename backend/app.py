@@ -341,6 +341,27 @@ class Role_Listing(db.Model):
                 json_list.append(row_dict)
 
         return json_list
+    
+    def filter_role_listing_by_date(self, endDate):
+        cursor = connection.cursor()
+        sql_query = "SELECT Role_Listing_ID, Role_Name, Date_Closed FROM Role_Listing ORDER BY Date_Closed ASC"
+        cursor.execute(sql_query)
+        rows = cursor.fetchall()
+        cursor.close()
+        
+        print(endDate)
+        end_date_obj = datetime.datetime.strptime(endDate, '%Y-%m-%d').date()
+        
+        json_list = []
+        for row in rows:
+            row_dict = {}
+            today = date.today()
+            if today < row[2] <= end_date_obj:
+                row_dict["Role_Listing_ID"] = row[0]
+                row_dict["Role_Name"] = row[1]
+                row_dict["Date_Closed"] = row[2]
+                json_list.append(row_dict)  
+        return json_list
         
 class Role_Application(db.Model):
     __tablename__ = 'Role_Application'
@@ -483,6 +504,10 @@ def filter_role_listings_by_skill(Skill_Name):
 @app.route("/filterRoleListingsByDept/<string:Dept>")
 def filter_role_listings_by_dept(Dept):
     return Role_Listing.filter_role_listing_by_dept(self = Role_Listing, Dept = Dept)
+
+@app.route("/filterRoleListingsByEndDate/<string:endDate>")
+def filter_role_listings_by_date(endDate):
+    return Role_Listing.filter_role_listing_by_date(self = Role_Listing, endDate=endDate)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
