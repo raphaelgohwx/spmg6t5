@@ -246,6 +246,19 @@ class Role_Listing(db.Model):
                 json_list.append(row_dict)
         return json_list
     
+    def retrieve_active_role_listings_ID(self):
+        cursor = connection.cursor()
+        cursor.execute("SELECT Role_Listing_ID, Date_Closed FROM Role_Listing")
+        rows = cursor.fetchall()
+        cursor.close()
+
+        json_list = []
+        for row in rows:
+            today = date.today()
+            if today < row[1]:
+                json_list.append(row[0])
+        return json_list
+    
     # retrieve highest roleListingID to be used for creating new role listings
     def get_max_role_listing_id():
         cursor = connection.cursor()
@@ -291,6 +304,60 @@ class Role_Listing(db.Model):
             return "Success"
         else:
             return "Listing does not exist"
+        
+class Role_Application(db.Model):
+    __tablename__ = 'Role_Application'
+
+    Role_Listing_ID = db.Column(db.Integer, primary_key=True)
+    Staff_ID = db.Column(db.Integer, primary_key=True)
+
+    def __init__(self, Role_Listing_ID, Staff_ID):
+        self.Role_Listing_ID = Role_Listing_ID
+        self.Staff_ID = Staff_ID
+
+    # CRUD functions for Role_Application table
+    def create_role_application(self):
+        if (self.role_application_is_not_empty() == False or self.role_application_is_not_null() == False):
+            return "Error: One or more fields are empty."
+        elif (self.Role_Listing_ID not in Role_Listing.retrieve_active_role_listings_ID(self)):
+            return "Error: Role Listing ID does not exist or is closed."
+        elif (self.Staff_ID not in Staff.retrieve_all_Staff_ID(self)):
+            return "Error: Staff ID does not exist."
+        elif ((self.Staff_ID, self.Role_Listing_ID) in Role_Application.retrieve_all_role_application(self)):
+            return "Error: Role Application already exists."
+        else:
+            cursor = connection.cursor()
+            cursor.execute("INSERT INTO Role_Application VALUES (%s, %s)", (self.Role_Listing_ID, self.Staff_ID))
+            connection.commit()
+            cursor.close()
+            return True
+
+    def delete_role_application(self):
+        cursor = connection.cursor(self)
+        cursor.execute("DELETE FROM Role_Application WHERE Role_Listing_ID = %s AND Staff_ID = %s", (self.Role_Listing_ID, self.Staff_ID))
+        connection.commit()
+        cursor.close()
+        return True
+
+    def retrieve_all_role_application(self):
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM Role_Application")
+        rows = cursor.fetchall()
+        cursor.close()
+        return rows
+
+    def role_application_is_not_empty(self):
+        if (self.Role_Listing_ID == "" or self.Staff_ID == ""):
+            return False
+        else:
+            return True
+
+    def role_application_is_not_null(self):
+        if (self.Role_Listing_ID == None or self.Staff_ID == None):
+            return False
+        else:
+            return True
+
 # class Role_Skill(db.Model):
 #     __tablename__ = 'Role_Skill'
 
@@ -367,6 +434,10 @@ def update_role_listing():
     dept = data["Dept"]
     newListing = Role_Listing(role_listing_id, role_name, date_closed, role_description, dept)
     return newListing.updateRoleListing()
+
+@app.route("/getAllRoleApplications")
+def get_all_role_applications():
+    return Role_Application.retrieve_all_role_application(self=Role_Application)
 
 
 if __name__ == "__main__":
