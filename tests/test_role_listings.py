@@ -72,4 +72,9 @@ class TestRoleListing(unittest.TestCase):
         Role_Listing1 = Role_Listing(10, "IT Team", "2023-12-10", "IT Team description is here", None)
         assert Role_Listing1.create_Role_Listing() == "Error: One or more fields are empty."
 
+    def test_view_all_Role_Listing(self):
+        assert Role_Listing.retrieve_all_role_listings(self) != None
+
+    def test_view_active_Role_Listing(self):
+        assert Role_Listing.retrieve_active_role_listings(self) != None
 
