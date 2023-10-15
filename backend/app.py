@@ -305,6 +305,24 @@ class Role_Listing(db.Model):
         else:
             return "Listing does not exist"
         
+    def filter_role_listing_by_skill_name(self, Skill_Name):
+        cursor = connection.cursor()
+        sql_query = "SELECT Role_Listing.Role_Listing_ID, Role_Listing.Role_Name, Role_Listing.Date_Closed FROM Role_Listing INNER JOIN Role_Skill ON Role_Listing.Role_Name = Role_Skill.Role_Name WHERE Skill_Name = '{}' ORDER BY Date_Closed ASC".format(Skill_Name)
+        cursor.execute(sql_query)
+        rows = cursor.fetchall()
+        cursor.close()
+
+        json_list = []
+        for row in rows:
+            row_dict = {}
+            today = date.today()
+            if today < row[2]:
+                row_dict["Role_Listing_ID"] = row[0]
+                row_dict["Role_Name"] = row[1]
+                row_dict["Date_Closed"] = row[2]
+                json_list.append(row_dict)
+        return json_list
+        
 class Role_Application(db.Model):
     __tablename__ = 'Role_Application'
 
@@ -439,6 +457,9 @@ def update_role_listing():
 def get_all_role_applications():
     return Role_Application.retrieve_all_role_application(self=Role_Application)
 
+@app.route("/filterRoleListingsBySkill/<string:Skill_Name>")
+def filter_role_listings_by_skill(Skill_Name):
+    return Role_Listing.filter_role_listing_by_skill_name(self = Role_Listing, Skill_Name = Skill_Name)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
