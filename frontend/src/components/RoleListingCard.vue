@@ -10,7 +10,7 @@
 
         <v-item-group class="d-flex justify-space-between align-center">
           <v-item>
-            {{ expiry }}
+            <v-chip label class="ma-0">Expires: {{ expiry }}</v-chip>
           </v-item>
 
           <v-card-actions>
