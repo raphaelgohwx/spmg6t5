@@ -362,6 +362,36 @@ class Role_Listing(db.Model):
                 row_dict["Date_Closed"] = row[2]
                 json_list.append(row_dict)  
         return json_list
+    
+    def get_role_skills(Role_Listing_ID):
+        cursor = connection.cursor()
+        role_listing_sql_query = "SELECT Role_Skill.Skill_Name from Role_Listing INNER JOIN Role_Skill on Role_Listing.Role_Name = Role_Skill.Role_Name WHERE Role_Listing_ID = {}".format(Role_Listing_ID)
+        cursor.execute(role_listing_sql_query)
+        role_skill_rows = cursor.fetchall()
+        cursor.close()
+
+        role_listing_list = []
+        for role_skill in role_skill_rows:
+            role_listing_list.append(role_skill[0])
+
+        return role_listing_list
+    
+    def skill_match(self, Role_Listing_ID, Staff_ID):
+        role_listing_list = Role_Listing.get_role_skills(Role_Listing_ID)
+
+        cursor = connection.cursor()
+        staff_skill_sql_query = "SELECT * FROM Staff_Skill WHERE Staff_ID = {}".format(Staff_ID)
+        cursor.execute(staff_skill_sql_query)
+        staff_skill_rows = cursor.fetchall()
+        cursor.close()
+
+        count = 0
+        for staff_skill in staff_skill_rows:
+            if staff_skill[1] in role_listing_list:
+                count += 1
+
+        role_skill_match_percentage = count / len(role_listing_list)
+        return jsonify(role_skill_match_percentage)
         
 class Role_Application(db.Model):
     __tablename__ = 'Role_Application'
@@ -508,6 +538,10 @@ def filter_role_listings_by_dept(Dept):
 @app.route("/filterRoleListingsByEndDate/<string:endDate>")
 def filter_role_listings_by_date(endDate):
     return Role_Listing.filter_role_listing_by_date(self = Role_Listing, endDate=endDate)
+
+@app.route("/roleSkillMatch/<string:Role_Listing_ID>/<string:Staff_ID>")
+def role_skill_match(Role_Listing_ID, Staff_ID):
+    return Role_Listing.skill_match(self = Role_Listing, Role_Listing_ID = Role_Listing_ID, Staff_ID = Staff_ID)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
