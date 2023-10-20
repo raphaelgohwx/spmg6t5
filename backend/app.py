@@ -307,7 +307,7 @@ class Role_Listing(db.Model):
         
     def filter_role_listing_by_skill_name(self, Skill_Name):
         cursor = connection.cursor()
-        sql_query = "SELECT Role_Listing.Role_Listing_ID, Role_Listing.Role_Name, Role_Listing.Date_Closed FROM Role_Listing INNER JOIN Role_Skill ON Role_Listing.Role_Name = Role_Skill.Role_Name WHERE Skill_Name = '{}' ORDER BY Date_Closed ASC".format(Skill_Name)
+        sql_query = "SELECT * FROM Role_Listing INNER JOIN Role_Skill ON Role_Listing.Role_Name = Role_Skill.Role_Name WHERE Skill_Name = '{}' ORDER BY Date_Closed ASC".format(Skill_Name)
         cursor.execute(sql_query)
         rows = cursor.fetchall()
         cursor.close()
@@ -320,12 +320,14 @@ class Role_Listing(db.Model):
                 row_dict["Role_Listing_ID"] = row[0]
                 row_dict["Role_Name"] = row[1]
                 row_dict["Date_Closed"] = row[2]
+                row_dict["Role_Description"] = row[3]
+                row_dict["Dept"] = row[4]
                 json_list.append(row_dict)
         return json_list
     
     def filter_role_listing_by_dept(self, Dept):
         cursor = connection.cursor()
-        sql_query = "SELECT Role_Listing.Role_Listing_ID, Role_Listing.Role_Name, Role_Listing.Date_Closed FROM Role_Listing WHERE Dept = '{}' ORDER BY Date_Closed ASC".format(Dept)
+        sql_query = "SELECT * FROM Role_Listing WHERE Dept = '{}' ORDER BY Date_Closed ASC".format(Dept)
         cursor.execute(sql_query)
         rows = cursor.fetchall()
         cursor.close()
@@ -338,13 +340,15 @@ class Role_Listing(db.Model):
                 row_dict["Role_Listing_ID"] = row[0]
                 row_dict["Role_Name"] = row[1]
                 row_dict["Date_Closed"] = row[2]
+                row_dict["Role_Description"] = row[3]
+                row_dict["Dept"] = row[4]
                 json_list.append(row_dict)
 
         return json_list
     
     def filter_role_listing_by_date(self, endDate):
         cursor = connection.cursor()
-        sql_query = "SELECT Role_Listing_ID, Role_Name, Date_Closed FROM Role_Listing ORDER BY Date_Closed ASC"
+        sql_query = "SELECT * FROM Role_Listing ORDER BY Date_Closed ASC"
         cursor.execute(sql_query)
         rows = cursor.fetchall()
         cursor.close()
@@ -360,6 +364,8 @@ class Role_Listing(db.Model):
                 row_dict["Role_Listing_ID"] = row[0]
                 row_dict["Role_Name"] = row[1]
                 row_dict["Date_Closed"] = row[2]
+                row_dict["Role_Description"] = row[3]
+                row_dict["Dept"] = row[4]
                 json_list.append(row_dict)  
         return json_list
     
