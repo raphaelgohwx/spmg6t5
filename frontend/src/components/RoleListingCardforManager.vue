@@ -11,6 +11,8 @@
                 <v-item>
                     <v-chip label class="ma-0">Expires: {{ expiry }}</v-chip>
                 </v-item>
+                <!-- Button to update role listing -->
+                <RouterLink to="/UpdateRole"><button class="rolebtn">Update Role</button></RouterLink>
                 </v-item-group>
             </div>
         </v-card-item>
@@ -62,4 +64,20 @@
     props: ["name", "description", "expiry", "department"],
   };
   </script>
+
+<style>
+.rolebtn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 10px 10px;
+}
+
+.rolebtn:hover {
+  background-color: #0056b3; /* darker when you hover over it */
+}
+</style>
   
