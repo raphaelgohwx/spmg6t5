@@ -451,6 +451,46 @@ class Role_Application(db.Model):
             return False
         else:
             return True
+        
+    def get_staff_skills_from_role_application(self):
+        cursor = connection.cursor(self)
+        cursor.execute("SELECT * FROM Role_Application")
+        rows = cursor.fetchall()
+        cursor.close()
+
+        role_application_dict = {}
+        for row in rows:
+            Role_Listing_ID = row[0]
+            Staff_Listing_ID = row[1]
+            
+            if Role_Listing_ID not in role_application_dict:
+
+                cursor = connection.cursor(self)
+                cursor.execute("SELECT * FROM Staff_Skill WHERE Staff_ID = {}".format(Staff_Listing_ID))
+                rows = cursor.fetchall()
+                cursor.close()
+
+                staff_skill_dict = {}
+                staff_skill_dict[Staff_Listing_ID] = []
+                for row in rows:
+                    staff_skill_dict[Staff_Listing_ID].append(row[1])
+                
+                role_application_dict[Role_Listing_ID] = [staff_skill_dict]
+
+            else:
+                cursor = connection.cursor(self)
+                cursor.execute("SELECT * FROM Staff_Skill WHERE Staff_ID = {}".format(Staff_Listing_ID))
+                rows = cursor.fetchall()
+                cursor.close()
+
+                staff_skill_dict = {}
+                staff_skill_dict[Staff_Listing_ID] = []
+                for row in rows:
+                    staff_skill_dict[Staff_Listing_ID].append(row[1])
+
+                role_application_dict[Role_Listing_ID].append(staff_skill_dict)
+
+        return jsonify(role_application_dict)
 
 # class Role_Skill(db.Model):
 #     __tablename__ = 'Role_Skill'
@@ -548,6 +588,10 @@ def filter_role_listings_by_date(endDate):
 @app.route("/roleSkillMatch/<string:Role_Listing_ID>/<string:Staff_ID>")
 def role_skill_match(Role_Listing_ID, Staff_ID):
     return Role_Listing.skill_match(self = Role_Listing, Role_Listing_ID = Role_Listing_ID, Staff_ID = Staff_ID)
+
+@app.route("/getStaffSkills")
+def get_staff_skills():
+    return Role_Application.get_staff_skills_from_role_application(self = Role_Application)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
