@@ -398,6 +398,41 @@ class Role_Listing(db.Model):
 
         role_skill_match_percentage = count / len(role_listing_list)
         return jsonify(role_skill_match_percentage)
+    
+    def skill_match_from_Staff_ID(self, Staff_ID):
+        cursor = connection.cursor()
+        role_application_sql_query = "SELECT Role_Application.Role_Listing_ID, Role_Application.Staff_ID, Staff_Skill.Skill_Name FROM Role_Application INNER JOIN Staff_Skill ON Role_Application.Staff_ID = Staff_Skill.Staff_ID WHERE Role_Application.Staff_ID = {}".format(Staff_ID)
+        cursor.execute(role_application_sql_query)
+        role_application_rows = cursor.fetchall()
+        cursor.close()
+
+
+        Role_Application_Set = set()
+        staff_skill_list = []
+
+        for row in role_application_rows:
+            Skill_Name = row[2]
+            if Skill_Name not in staff_skill_list:
+
+                staff_skill_list.append(Skill_Name)
+            Role_Application_Set.add(row[0])
+
+        role_skill_match_percentage_dict = {}
+        for Role_Listing_ID in Role_Application_Set:
+            cursor = connection.cursor()
+            role_listing_sql_query = "Select Skill_Name FROM Role_Listing INNER JOIN Role_Skill ON Role_Listing.Role_Name = Role_Skill.Role_Name WHERE Role_Listing.Role_Listing_ID = {}".format(Role_Listing_ID)
+            cursor.execute(role_listing_sql_query)
+            role_listing_rows = cursor.fetchall()
+            cursor.close()
+
+            count = 0
+            for Skill_Name in role_listing_rows:
+                if Skill_Name[0] in staff_skill_list:
+                    count += 1
+
+            role_skill_match_percentage_dict[Role_Listing_ID] = count/len(role_listing_rows)
+        return role_skill_match_percentage_dict
+
         
 class Role_Application(db.Model):
     __tablename__ = 'Role_Application'
@@ -491,6 +526,7 @@ class Role_Application(db.Model):
                 role_application_dict[Role_Listing_ID].append(staff_skill_dict)
 
         return jsonify(role_application_dict)
+    
 
 # class Role_Skill(db.Model):
 #     __tablename__ = 'Role_Skill'
@@ -588,6 +624,10 @@ def filter_role_listings_by_date(endDate):
 @app.route("/roleSkillMatch/<string:Role_Listing_ID>/<string:Staff_ID>")
 def role_skill_match(Role_Listing_ID, Staff_ID):
     return Role_Listing.skill_match(self = Role_Listing, Role_Listing_ID = Role_Listing_ID, Staff_ID = Staff_ID)
+
+@app.route("/roleSkillMatch/<string:Staff_ID>")
+def role_skill_match_staff_ID(Staff_ID):
+    return Role_Listing.skill_match_from_Staff_ID(self = Role_Listing, Staff_ID=Staff_ID)
 
 @app.route("/getStaffSkills")
 def get_staff_skills():
