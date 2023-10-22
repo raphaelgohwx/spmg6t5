@@ -430,7 +430,7 @@ class Role_Listing(db.Model):
                 if Skill_Name[0] in staff_skill_list:
                     count += 1
 
-            role_skill_match_percentage_dict[Role_Listing_ID] = count/len(role_listing_rows)
+            role_skill_match_percentage_dict[Role_Listing_ID] = [Staff_ID,count/len(role_listing_rows)]
         return role_skill_match_percentage_dict
 
         
