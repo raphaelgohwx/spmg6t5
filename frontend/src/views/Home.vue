@@ -27,13 +27,9 @@
         Welcome {{ store.getCurrentUser }}
       </div>
       <div v-if="this.staff_roles.length != 0">
+
         <div class="filter">
-            <div>
-              <div class="filter-button">
-              <button @click="toggleFilterOptions"> Select Filter </button>  
-              </div>
-              <div v-if="showFilterOptions">   
-                
+             
             <div>
               <select clearable id="selectFilter" v-model="selectFilter">
                 <option :value="null" disabled selected>Filter By</option>
@@ -64,17 +60,15 @@
             <div v-if="selectFilter == 'Fdate'">
               <!-- Filter by closing date -->
               <label for="closingDateFilter">Closing Date Before:</label>
-              <input type="date" id="closingDateFilter" v-model="closingDateFilter" @input="setMinDate" />
+              <input type="date" id="closingDateFilter" v-model="closingDateFilter" :min="minDate"/>
             </div>
-            <!-- Need to disable all previous dates -->
             
       
             <div v-if="selectFilter != null" class="resetter">
               <!-- Reset button to clear filters -->
               <button @click="clearFilters">Reset Filter</button>
             </div>
-          </div> 
-          </div>
+
         </div>
 
         <!-- Display filtered roles -->
@@ -90,25 +84,27 @@
           </template>
         </div>
 
-        <div v-else>
-          <div v-if="selectFilter != null">
-            <b> No role listings found within filter. </b>
+          <div v-if="selectFilter != null && filteredRoles.length == 0">
+            <div v-if="deptFilter == null && skillFilter == null && closingDateFilter == null">
+              <!-- <b> Please select an option from the dropdown to view listings. </b> -->
+            </div>
+            <div v-else>
+              <b> There is no role listing that matches the filter criteria. </b>
+            </div>
           </div>
-          <div v-else>
-            <p> No filters applied.</p>
-          </div>
-          <p> All role listings shown below.</p>
-          <div>
-          <template v-for="role in staff_roles">
-            <RoleListingCard
-              :name="role.Role_Name"
-              :description="role.Role_Description"
-              :expiry="role.Date_Closed.substr(0, 16)"
-              :department="role.Dept"
-            />
-          </template>
+
+        <!-- Show all role listings -->
+        <div v-if="selectFilter == null">
+            <template v-for="role in staff_roles">
+              <RoleListingCard
+                :name="role.Role_Name"
+                :description="role.Role_Description"
+                :expiry="role.Date_Closed.substr(0, 16)"
+                :department="role.Dept"
+              />
+            </template>
         </div>
-        </div>
+
       </div>
         
       <div v-else>
@@ -148,7 +144,7 @@ export default {
                   "Data Analytics"
                 ],
       filteredRoles: [],
-      showFilterOptions: false, // Initially hide filter options
+      minDate: '',
     };
   },
   setup() {
@@ -167,6 +163,7 @@ export default {
       console.log(this.staff_roles); 
       
     });
+    this.setMinDate();
   },
   mounted() {
     this.getDeptNames();
@@ -214,12 +211,12 @@ export default {
       }
     },
     setMinDate() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to month as it's 0-based
-    const day = today.getDate().toString().padStart(2, '0');
-    const minDate = `${year}-${month}-${day}`;
-    document.getElementById('closingDateFilter').min = minDate;
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = (today.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 to month as it starts from 0
+      const day = today.getDate().toString().padStart(2, '0');
+      const todayDate = `${year}-${month}-${day}`;
+      this.minDate = todayDate;
     },
 
     clearFilters() {
@@ -227,11 +224,8 @@ export default {
       this.closingDateFilter = null;
       this.skillFilter = null;
       this.selectFilter = null;
-      this.showFilterOptions = false;
     },
-    toggleFilterOptions() {
-      this.showFilterOptions = !this.showFilterOptions;
-    },
+
   },
     watch: {
       skillFilter: "filterRoleListingsBySkill",
