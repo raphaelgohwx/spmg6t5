@@ -449,8 +449,16 @@ class Role_Listing(db.Model):
 
         return role_skill_match_percentage_dict
     
+    def select_Role_Listing_by_ID(self, Role_ID):
+        if (Role_ID) in Role_Listing.retrieve_all_role_listing_ID(self):
+            cursor = connection.cursor(self)
+            cursor.execute("SELECT * FROM Role_Listing WHERE Role_Listing_ID = %s", (Role_ID,))
+            result = cursor.fetchall()
+            cursor.close()
+            return result[0]
+        else:
+            return "Not found"
 
-        
 class Role_Application(db.Model):
     __tablename__ = 'Role_Application'
 
@@ -650,5 +658,8 @@ def role_skill_match_staff_ID(Staff_ID):
 def get_staff_skills():
     return Role_Application.get_staff_skills_from_role_application(self = Role_Application)
 
+@app.route("/roleListing/<string:Role_ID>")
+def select_Role_Listing_by_ID(Role_ID):
+    return Role_Listing.skill_match_from_Staff_ID(self = Role_Listing, Role_ID=Role_ID)
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
