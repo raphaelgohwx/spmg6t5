@@ -176,7 +176,7 @@ class Role_Listing(db.Model):
             return "Error: One or more fields are empty."
         elif self.is_not_past_date() == False:
             return "Error: Date closed is in the past."
-        elif (Role_Listing.same_role_name_and_date(self, self.Role_Name, self.Date_Closed) == False):
+        elif (self.same_role_name_and_date(self.Role_Name, self.Date_Closed) == False):
             return "Error: Role Listing with same Role Name and Date already exists."
         else:
             
