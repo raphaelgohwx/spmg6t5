@@ -398,40 +398,44 @@ class Role_Listing(db.Model):
 
         role_skill_match_percentage = count / len(role_listing_list)
         return jsonify(role_skill_match_percentage)
-    
+
     def skill_match_from_Staff_ID(self, Staff_ID):
         cursor = connection.cursor()
-        role_application_sql_query = "SELECT Role_Application.Role_Listing_ID, Role_Application.Staff_ID, Staff_Skill.Skill_Name FROM Role_Application INNER JOIN Staff_Skill ON Role_Application.Staff_ID = Staff_Skill.Staff_ID WHERE Role_Application.Staff_ID = {}".format(Staff_ID)
-        cursor.execute(role_application_sql_query)
-        role_application_rows = cursor.fetchall()
+        Staff_Skill_sql_query = "SELECT Skill_Name FROM Staff_Skill WHERE StafF_ID = {}".format(Staff_ID)
+        cursor.execute(Staff_Skill_sql_query)
+        staff_skill_rows = cursor.fetchall()
         cursor.close()
 
-
-        Role_Application_Set = set()
         staff_skill_list = []
+        for row in staff_skill_rows:
+            staff_skill_list.append(row[0])
 
-        for row in role_application_rows:
-            Skill_Name = row[2]
-            if Skill_Name not in staff_skill_list:
+        cursor = connection.cursor()
+        Role_Application_sql_query = "SELECT * FROM Role_Listing INNER JOIN Role_Skill ON Role_Listing.Role_Name = Role_Skill.Role_Name"
+        cursor.execute(Role_Application_sql_query)
+        role_listing_rows = cursor.fetchall()
+        cursor.close()
 
-                staff_skill_list.append(Skill_Name)
-            Role_Application_Set.add(row[0])
+        role_listing_dict = {}
+
+        for row in role_listing_rows:
+            today = date.today()
+            if today < row[2]:
+                if row[0] not in role_listing_dict:
+                    role_listing_dict[row[0]] = [row[6]]
+                else:
+                    role_listing_dict[row[0]].append(row[6])
 
         role_skill_match_percentage_dict = {}
-        for Role_Listing_ID in Role_Application_Set:
-            cursor = connection.cursor()
-            role_listing_sql_query = "Select Skill_Name FROM Role_Listing INNER JOIN Role_Skill ON Role_Listing.Role_Name = Role_Skill.Role_Name WHERE Role_Listing.Role_Listing_ID = {}".format(Role_Listing_ID)
-            cursor.execute(role_listing_sql_query)
-            role_listing_rows = cursor.fetchall()
-            cursor.close()
-
+        for k,v in role_listing_dict.items():
             count = 0
-            for Skill_Name in role_listing_rows:
-                if Skill_Name[0] in staff_skill_list:
+            for staff_skill in staff_skill_list:
+                if staff_skill in v:
                     count += 1
+                role_skill_match_percentage_dict[k] = count/len(v)
 
-            role_skill_match_percentage_dict[Role_Listing_ID] = [Staff_ID,count/len(role_listing_rows)]
         return role_skill_match_percentage_dict
+    
 
         
 class Role_Application(db.Model):
@@ -514,7 +518,7 @@ class Role_Application(db.Model):
 
             else:
                 cursor = connection.cursor(self)
-                cursor.execute("SELECT * FROM Staff_Skill WHERE Staff_ID = {}".format(Staff_Listing_ID))
+                cursor.execute("SELECT Staff_Skill FROM Staff_Skill WHERE Staff_ID = {}".format(Staff_Listing_ID))
                 rows = cursor.fetchall()
                 cursor.close()
 
