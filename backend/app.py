@@ -176,7 +176,7 @@ class Role_Listing(db.Model):
             return "Error: One or more fields are empty."
         elif self.is_not_past_date() == False:
             return "Error: Date closed is in the past."
-        elif (self.same_role_name_and_date(self.Role_Name, self.Date_Closed) == False):
+        elif (self.same_role_name_and_date(self.Role_Name, self.Date_Closed, self.Dept) == False):
             return "Error: Role Listing with same Role Name and Date already exists."
         else:
             
@@ -196,9 +196,9 @@ class Role_Listing(db.Model):
         else:
             return False
         
-    def same_role_name_and_date(self, Role_Name, Date_Closed):
+    def same_role_name_and_date(self, Role_Name, Date_Closed, Dept):
         cursor = connection.cursor()
-        cursor.execute("SELECT * FROM Role_Listing WHERE Role_Name = %s AND Date_Closed = %s", (Role_Name, Date_Closed))
+        cursor.execute("SELECT * FROM Role_Listing WHERE Role_Name = %s AND Date_Closed = %s AND Dept = %s", (Role_Name, Date_Closed, Dept))
         rows = cursor.fetchall()
         cursor.close()
 
