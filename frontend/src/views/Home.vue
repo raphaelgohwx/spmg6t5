@@ -1,13 +1,16 @@
 <template>
   <div>
     <navbar />
-    <p v-if="store.getCurrentUser == null" class="text-center text-h4">Please Log In to Access</p>
+    {{ skillMatch }}
+    <p v-if="store.getCurrentUser == null" class="text-center text-h4">
+      Please Log In to Access
+    </p>
 
-    <div v-if="store.getCurrentUser == 'Manager' || store.getCurrentUser == 'HR'">
-      <div class="text-center text-h4">
-        Welcome {{ store.getCurrentUser }}
-      </div>
-            <div v-if="this.staff_roles.length != 0">
+    <div
+      v-if="store.getCurrentUser == 'Manager' || store.getCurrentUser == 'HR'"
+    >
+      <div class="text-center text-h4">Welcome {{ store.getCurrentUser }}</div>
+      <div v-if="this.staff_roles.length != 0">
         <template v-for="role in staff_roles">
           <RoleListingCardforManager
             :name="role.Role_Name"
@@ -18,14 +21,11 @@
         </template>
       </div>
 
-    <div v-else>There are currently no role listings</div>
-  </div>
+      <div v-else>There are currently no role listings</div>
+    </div>
 
-
-  <div v-if="store.getCurrentUser == 'Staff'">
-      <div class="text-center text-h4">
-        Welcome {{ store.getCurrentUser }}
-      </div>
+    <div v-if="store.getCurrentUser == 'Staff'">
+      <div class="text-center text-h4">Welcome {{ store.getCurrentUser }}</div>
       <div v-if="this.staff_roles.length != 0">
 
         <div class="filter">
@@ -39,14 +39,16 @@
               </select>
             </div>
 
-            <div v-if="selectFilter == 'Fdept'">
-              <!-- Filter by department -->
-              <label for="deptFilter">Department:</label>
-              <select clearable id="deptFilter" v-model="deptFilter">
-                <option :value="null" disabled selected>Select Dept</option>
-                <option v-for="dept in depts" :key="dept" :value="dept">{{ dept }}</option>
-              </select>
-            </div>
+              <div v-if="selectFilter == 'Fdept'">
+                <!-- Filter by department -->
+                <label for="deptFilter">Department:</label>
+                <select clearable id="deptFilter" v-model="deptFilter">
+                  <option :value="null" disabled selected>Select Dept</option>
+                  <option v-for="dept in depts" :key="dept" :value="dept">
+                    {{ dept }}
+                  </option>
+                </select>
+              </div>
 
             <div v-if="selectFilter == 'Fskill'">
               <!-- Filter by skill -->
@@ -73,13 +75,14 @@
 
         <!-- Display filtered roles -->
         <div v-if="filteredRoles.length > 0">
-          <p>Filtered listings shown below. </p>
+          <p>Filtered listings shown below.</p>
           <template v-for="role in filteredRoles">
             <RoleListingCard
               :name="role.Role_Name"
               :description="role.Role_Description"
               :expiry="role.Date_Closed.substr(0, 16)"
               :department="role.Dept"
+              :matchPercentage="skillMatch[role.Role_Listing_ID]"
             />
           </template>
         </div>
@@ -95,22 +98,26 @@
 
         <!-- Show all role listings -->
         <div v-if="selectFilter == null">
-            <template v-for="role in staff_roles">
+
+          <template v-if="skillMatch != null && staff_roles != []">
+            <template v-for="(role, index) in staff_roles" :key="index">
               <RoleListingCard
                 :name="role.Role_Name"
                 :description="role.Role_Description"
                 :expiry="role.Date_Closed.substr(0, 16)"
                 :department="role.Dept"
+                :matchPercentage="skillMatch[role.Role_Listing_ID]"
               />
             </template>
+          </template>
+            
         </div>
 
       </div>
-        
-      <div v-else>
-        There are currently no role listings.
-      </div>
+
+      <div v-else>There are currently no role listings.</div>
     </div>
+    
   </div>
 </template>
 
@@ -120,76 +127,112 @@ import RoleListingCardforManager from "@/components/RoleListingCardforManager.vu
 import RoleListingCard from "@/components/RoleListingCard.vue";
 import ApiService from "@/store/api_service";
 import { useAppStore } from "@/store/app";
-import axios from 'axios';
+import axios from "axios";
+import {watch, onMounted, ref } from 'vue'
+
 
 export default {
   data() {
     return {
       staff_roles: [],
+      displayed_roles: [],
+      skillMatch: null,
+      finished: false,
       selectFilter: null,
       deptFilter: null,
       skillFilter: null,
       closingDateFilter: null,
       depts: [],
-      skills: ["Attention to Detail",
-                  "Stakeholder Management",
-                  "Communication",
-                  "Analytical Skills",
-                  "Teamwork",
-                  "Adaptability",
-                  "Creative Thinking",
-                  "Project Management",
-                  "Coding",
-                  "Critical Thinking",
-                  "Data Analytics"
-                ],
+      skills: [
+        "Attention to Detail",
+        "Stakeholder Management",
+        "Communication",
+        "Analytical Skills",
+        "Teamwork",
+        "Adaptability",
+        "Creative Thinking",
+        "Project Management",
+        "Coding",
+        "Critical Thinking",
+        "Data Analytics",
+      ],
       filteredRoles: [],
       minDate: '',
     };
   },
   setup() {
     const store = useAppStore();
-    console.log(store.getCurrentUser)
-    return { store };
+    // console.log(store.getCurrentUser);
+    var skillMatch = ref(null);
+
+    onMounted(() => {
+      watch(() => store.userID, () => {
+        axios.get(`http://localhost:5001/roleSkillMatch/${store.getCurrentUserID}`)
+        .then((res) => 
+          
+          skillMatch.value = res.data,
+          console.log(skillMatch)
+        )
+      })
+    })
+
+    return { store,skillMatch };
   },
   components: {
     navbar,
     RoleListingCard,
     RoleListingCardforManager,
   },
-  created() {
-    ApiService.getActiveRoleListings().then((res) => {
-      this.staff_roles = res.data;
-      console.log(this.staff_roles); 
-      
-    });
-    this.setMinDate();
-  },
   mounted() {
     this.getDeptNames();
   },
+  created() {
+    ApiService.getActiveRoleListings().then((res) => {
+      this.staff_roles = res.data;
+    });
+  },
   methods: {
+    // startInterval() {
+    //   const intervalTime = 1500; // 500 milliseconds (1/2 second)
+    //   let index = 0;
+
+    //   const intervalId = setInterval(() => {
+    //     if (index < this.staff_roles.length) {
+    //       this.displayed_roles.push(this.staff_roles[index]);
+    //       index++;
+    //     } else {
+    //       clearInterval(intervalId); // Stop the interval when all roles are displayed.
+    //       this.finished = true
+    //     }
+    //   }, intervalTime);
+    // },
+
     async getDeptNames() {
-      const response = await axios.get('http://localhost:5001/getDeptNames');
+      const response = await axios.get("http://localhost:5001/getDeptNames");
       this.depts = response.data;
     },
 
     async filterRoleListingsBySkill() {
-        try {
-          if (this.skillFilter) {
-            const response = await axios.get('http://localhost:5001/filterRoleListingsBySkill/' + this.skillFilter);
-            this.filteredRoles = response.data;
-          } else {
-            this.filteredRoles = [];
-          }
-        } catch (error) {
-          console.error("Error filtering roles by skill:", error);
+      try {
+        if (this.skillFilter) {
+          const response = await axios.get(
+            "http://localhost:5001/filterRoleListingsBySkill/" +
+              this.skillFilter
+          );
+          this.filteredRoles = response.data;
+        } else {
+          this.filteredRoles = [];
         }
-      },
+      } catch (error) {
+        console.error("Error filtering roles by skill:", error);
+      }
+    },
     async filterRoleListingsByDept() {
       try {
         if (this.deptFilter) {
-          const response = await axios.get('http://localhost:5001/filterRoleListingsByDept/' + this.deptFilter);
+          const response = await axios.get(
+            "http://localhost:5001/filterRoleListingsByDept/" + this.deptFilter
+          );
           this.filteredRoles = response.data;
         } else {
           this.filteredRoles = [];
@@ -198,10 +241,13 @@ export default {
         console.error("Error filtering roles by dept:", error);
       }
     },
-    async filterRoleListingsByEndDate(){
+    async filterRoleListingsByEndDate() {
       try {
         if (this.closingDateFilter) {
-          const response = await axios.get('http://localhost:5001/filterRoleListingsByEndDate/' + this.closingDateFilter);
+          const response = await axios.get(
+            "http://localhost:5001/filterRoleListingsByEndDate/" +
+              this.closingDateFilter
+          );
           this.filteredRoles = response.data;
         } else {
           this.filteredRoles = [];
@@ -227,11 +273,11 @@ export default {
     },
 
   },
-    watch: {
-      skillFilter: "filterRoleListingsBySkill",
-      deptFilter: "filterRoleListingsByDept",
-      closingDateFilter: "filterRoleListingsByEndDate",
-    },
+  watch: {
+    skillFilter: "filterRoleListingsBySkill",
+    deptFilter: "filterRoleListingsByDept",
+    closingDateFilter: "filterRoleListingsByEndDate",
+  },
 };
 </script>
 
@@ -250,8 +296,8 @@ export default {
   border-radius: 4px;
 }
 
-.resetter button{
-  background-color: #6C757D;
+.resetter button {
+  background-color: #6c757d;
   color: #fff;
   border-radius: 10px;
   padding: 5px 10px;

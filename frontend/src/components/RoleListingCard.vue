@@ -17,13 +17,28 @@
             <v-btn variant="outlined"> Apply </v-btn>
           </v-card-actions>
         </v-item-group>
+
+        
+          <v-progress-linear v-if="matchPercentage !== null" v-model="match"  color="blue-lighten-3" height="25" rounded>
+          <template v-slot:default="{ value }">
+            <strong>{{value}}%</strong>
+          </template>
+        </v-progress-linear>
+        
       </div>
     </v-card-item>
   </v-card>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
-  props: ["name", "description", "expiry", "department"],
+  data() {
+    return{
+      match: Math.round(this.matchPercentage * 100)
+    }
+  },
+  props: ["name", "description", "expiry", "department", "matchPercentage"],
 };
 </script>

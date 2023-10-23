@@ -148,10 +148,10 @@
           
           try {
           // Make a POST request to your Flask backend to create the role listing
-              const response = await axios.post('http://localhost:5001/createRoleListing', newRoleListing
-              )
+              const response = await axios.post('http://localhost:5001/createRoleListing', newRoleListing)
+              console.log(response)
           // Handle the response here, you can show a success message or handle errors
-          if (response.status === 200) {
+          if (response.data == "Success") {
             alert("Role listing created successfully!");
           } else {
             alert("Failed to create role listing");
