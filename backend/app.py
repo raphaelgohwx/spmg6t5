@@ -176,6 +176,8 @@ class Role_Listing(db.Model):
             return "Error: One or more fields are empty."
         elif self.is_not_past_date() == False:
             return "Error: Date closed is in the past."
+        elif (Role_Listing.same_role_name_and_date(self, self.Role_Name, self.Date_Closed) == False):
+            return "Error: Role Listing with same Role Name and Date already exists."
         else:
             
             cursor = connection.cursor()
@@ -183,7 +185,6 @@ class Role_Listing(db.Model):
             connection.commit()
             cursor.close()
             return "Success"
-
         
     def delete_Role_Listing(self):
         if (self.Role_Listing_ID) in Role_Listing.retrieve_all_role_listing_ID(self):
@@ -194,6 +195,18 @@ class Role_Listing(db.Model):
             return True
         else:
             return False
+        
+    def same_role_name_and_date(self, Role_Name, Date_Closed):
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM Role_Listing WHERE Role_Name = %s AND Date_Closed = %s", (Role_Name, Date_Closed))
+        rows = cursor.fetchall()
+        cursor.close()
+
+        if len(rows) > 0:
+            return False
+        else:
+            return True
+
     
     # boolean logic for Role_Listing table
     def role_listing_is_not_empty(self):

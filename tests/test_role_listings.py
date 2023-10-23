@@ -30,6 +30,14 @@ class TestRoleListing(unittest.TestCase):
         Role_Listing1 = Role_Listing(1, "IT Team", "2023-12-10", "IT Team description is here", "IT")
         assert Role_Listing1.create_Role_Listing() == "Error: Role Listing ID already exists."
 
+    # negative test case -> assert False if same role name and date already exists
+    def test_create_Role_Listing_reject_same_name_and_date(self):
+        Role_Listing1 = Role_Listing(10, "IT Team", "2023-12-10", "IT Team description is here", "IT")
+        assert Role_Listing1.create_Role_Listing() == "Success"
+        Role_Listing2 = Role_Listing(11, "IT Team", "2023-12-10", "IT Team description is here", "IT")
+        assert Role_Listing2.create_Role_Listing() == "Error: Role Listing with same Role Name and Date already exists."
+        assert Role_Listing1.delete_Role_Listing() == True
+
     # negative test case -> assert False for any empty Strings
     def test_create_Role_Listing_empty_Role_Listing_ID(self):
         Role_Listing1 = Role_Listing("", "IT Team", "2023-12-10", "IT Team description is here", "IT")
