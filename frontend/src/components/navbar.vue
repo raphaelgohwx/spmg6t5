@@ -2,41 +2,25 @@
   <v-card>
     <!-- Header and symbols -->
     <v-toolbar color="primary">
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
-      <v-toolbar-title>LJPS</v-toolbar-title>
+      <v-toolbar-title>
+        <!-- <v-btn icon to="/">
+          <v-icon>mdi-home</v-icon>
+        </v-btn> -->
+        
+        LJPS
+      </v-toolbar-title>
+      
 
       <v-spacer></v-spacer>
 
-      <v-text-field
-        dense
-        variant="solo"
-        label="Search"
-        append-inner-icon="mdi-magnify"
-        single-line
-        hide-details
-      ></v-text-field>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
-
-      <!-- Nav bar extensions -->
-      <template v-slot:extension>
-        <v-tabs v-model="tab" align-tabs="title">
-          <v-tab v-for="(item, index) in items" :key="index" :value="index">
-            {{ item.label }}
-          </v-tab>
-        </v-tabs>
-
-        <!-- Login button -->
-        <v-spacer></v-spacer>
-        <v-menu transition="slide-y-transition">
+      <v-menu transition="slide-y-transition">
           <template v-slot:activator="{ props }">
             <v-btn
               v-bind="props"
               :style="{
-                marginRight: 30 + 'px',
+                // marginRight: 30 + 'px',
                 backgroundColor: '#28359',
                 color: 'white',
               }"
@@ -59,7 +43,29 @@
 
           </v-list>
         </v-menu>
-      </template>
+
+      <!-- <v-text-field
+        dense
+        variant="solo"
+        label="Search"
+        append-inner-icon="mdi-magnify"
+        single-line
+        hide-details
+      ></v-text-field> -->
+
+      <!-- <v-btn icon>
+        <v-icon>mdi-dots-vertical</v-icon>
+      </v-btn> -->
+
+      <!-- Nav bar extensions -->
+      <!-- <template v-slot:extension>
+        <v-tabs v-model="tab" align-tabs="title">
+          <v-tab v-for="(item, index) in items" :key="index" :value="index">
+            {{ item.label }}
+          </v-tab>
+        </v-tabs>
+        
+      </template> -->
     </v-toolbar>
   </v-card>
 </template>

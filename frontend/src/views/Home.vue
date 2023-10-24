@@ -17,6 +17,7 @@
             :description="role.Role_Description"
             :expiry="role.Date_Closed.substr(0, 16)"
             :department="role.Dept"
+            :matchPercentage="skillMatch[role.Role_Listing_ID]"
           />
         </template>
       </div>
@@ -128,7 +129,8 @@ import RoleListingCard from "@/components/RoleListingCard.vue";
 import ApiService from "@/store/api_service";
 import { useAppStore } from "@/store/app";
 import axios from "axios";
-import {watch, onMounted, ref } from 'vue'
+import {watch, onMounted,onUnmounted, ref } from 'vue'
+import { onBeforeMount } from "vue";
 
 
 export default {
@@ -166,13 +168,15 @@ export default {
     var skillMatch = ref(null);
 
     onMounted(() => {
-      watch(() => store.userID, () => {
+      watch(() => store.getCurrentUserID, () => {
         axios.get(`http://localhost:5001/roleSkillMatch/${store.getCurrentUserID}`)
         .then((res) => 
-          
           skillMatch.value = res.data,
           console.log(skillMatch)
         )
+        .catch((err) => {
+          console.log(err)
+        })
       })
     })
 

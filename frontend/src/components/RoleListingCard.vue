@@ -19,9 +19,9 @@
         </v-item-group>
 
         
-          <v-progress-linear v-if="matchPercentage !== null" v-model="match"  color="blue-lighten-3" height="25" rounded>
+          <v-progress-linear v-if="match !== null" v-model="match"  color="blue-lighten-3" height="25" rounded>
           <template v-slot:default="{ value }">
-            <strong>{{value}}%</strong>
+            <strong>{{value}}% Skills Match</strong>
           </template>
         </v-progress-linear>
         
