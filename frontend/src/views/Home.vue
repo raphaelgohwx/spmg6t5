@@ -79,6 +79,7 @@
           <p>Filtered listings shown below.</p>
           <template v-for="role in filteredRoles">
             <RoleListingCard
+              :id="role.Role_Listing_ID"
               :name="role.Role_Name"
               :description="role.Role_Description"
               :expiry="role.Date_Closed.substr(0, 16)"
@@ -103,6 +104,7 @@
           <template v-if="skillMatch != null && staff_roles != []">
             <template v-for="(role, index) in staff_roles" :key="index">
               <RoleListingCard
+                :id="role.Role_Listing_ID"
                 :name="role.Role_Name"
                 :description="role.Role_Description"
                 :expiry="role.Date_Closed.substr(0, 16)"

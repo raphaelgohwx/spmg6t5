@@ -14,7 +14,8 @@
           </v-item>
 
           <v-card-actions>
-            <v-btn variant="outlined"> Apply </v-btn>
+            <v-btn v-if="match !== 0" variant="outlined" @click="applyForRole"> Apply </v-btn>
+            <v-btn v-else variant="outlined" disabled> Apply </v-btn>
           </v-card-actions>
         </v-item-group>
 
@@ -32,13 +33,32 @@
 
 <script>
 import axios from 'axios';
-
+import { useAppStore } from '@/store/app';
 export default {
   data() {
     return{
-      match: Math.round(this.matchPercentage * 100)
+      match: Math.round(this.matchPercentage * 100),
     }
   },
-  props: ["name", "description", "expiry", "department", "matchPercentage"],
+  props: ["id", "name", "description", "expiry", "department", "matchPercentage"],
+  methods: {
+    async applyForRole () {
+      const store = useAppStore();
+      const userID = store.getCurrentUserID;
+      const roleID = this.id;
+      try {
+        const response = await axios.post(`http://localhost:5001/api/apply/${userID}/${roleID}`);
+        console.log(response);
+        // if (response.status === 200) {
+        //   alert("Successfully applied for role!");
+        // }
+        // else {
+        //   alert("Failed to apply for role!");
+        // }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 };
 </script>
