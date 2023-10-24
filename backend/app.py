@@ -470,21 +470,22 @@ class Role_Application(db.Model):
         self.Staff_ID = Staff_ID
 
     # CRUD functions for Role_Application table
-    def create_role_application(self):
-        if (self.role_application_is_not_empty() == False or self.role_application_is_not_null() == False):
+    def create_role_application(self, Role_Listing_ID, Staff_ID):
+        # if (self.role_application_is_not_empty(self) == False or self.role_application_is_not_null(self) == False):
+        if (self.role_application_is_not_empty(self) == False):
             return "Error: One or more fields are empty."
-        elif (self.Role_Listing_ID not in Role_Listing.retrieve_active_role_listings_ID(self)):
+        elif (Role_Listing_ID not in Role_Listing.retrieve_active_role_listings_ID(self)):
             return "Error: Role Listing ID does not exist or is closed."
-        elif (self.Staff_ID not in Staff.retrieve_all_Staff_ID(self)):
+        elif (Staff_ID not in Staff.retrieve_all_Staff_ID(self)):
             return "Error: Staff ID does not exist."
-        elif ((self.Staff_ID, self.Role_Listing_ID) in Role_Application.retrieve_all_role_application(self)):
+        elif ((Staff_ID, Role_Listing_ID) in Role_Application.retrieve_all_role_application(self)):
             return "Error: Role Application already exists."
         else:
             cursor = connection.cursor()
-            cursor.execute("INSERT INTO Role_Application VALUES (%s, %s)", (self.Role_Listing_ID, self.Staff_ID))
+            cursor.execute("INSERT INTO Role_Application VALUES (%s, %s)", (Role_Listing_ID, Staff_ID))
             connection.commit()
             cursor.close()
-            return True
+            return "Role Application was created successfully!"
 
     def delete_role_application(self):
         cursor = connection.cursor(self)
@@ -506,11 +507,11 @@ class Role_Application(db.Model):
         else:
             return True
 
-    def role_application_is_not_null(self):
-        if (self.Role_Listing_ID == None or self.Staff_ID == None):
-            return False
-        else:
-            return True
+    # def role_application_is_not_null(self):
+    #     if (self.Role_Listing_ID == None or self.Staff_ID == None):
+    #         return False
+    #     else:
+    #         return True
         
     def get_staff_skills_from_role_application(self):
         cursor = connection.cursor(self)
@@ -661,5 +662,10 @@ def get_staff_skills():
 @app.route("/roleListing/<string:Role_ID>")
 def select_Role_Listing_by_ID(Role_ID):
     return Role_Listing.skill_match_from_Staff_ID(self = Role_Listing, Role_ID=Role_ID)
+
+@app.route("/apply/<int:Staff_ID>/<int:Role_Listing_ID>")
+def staff_apply_role_listing(Staff_ID, Role_Listing_ID):
+    return Role_Application.create_role_application(self = Role_Application, Staff_ID=Staff_ID, Role_Listing_ID=Role_Listing_ID)
+
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
