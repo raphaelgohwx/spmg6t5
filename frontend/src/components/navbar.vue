@@ -5,11 +5,11 @@
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
       <v-toolbar-title>
-        <!-- <v-btn icon to="/">
-          <v-icon>mdi-home</v-icon>
-        </v-btn> -->
+        <v-btn icon to="/">
+          LJPS
+        </v-btn>
         
-        LJPS
+
       </v-toolbar-title>
       
 

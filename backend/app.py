@@ -132,6 +132,18 @@ class Staff(db.Model):
             json_list.append(row[0])
         return json_list
 
+    def get_staff_skills_by_staff_id(self, staff_id):
+        cursor = connection.cursor()
+        cursor.execute("select Skill_Name from Staff_Skill where Staff_ID = {}".format(staff_id))
+        rows = cursor.fetchall()
+        cursor.close()
+
+        json_list = []
+        for row in rows:
+            json_list.append(row[0])
+        return json_list
+
+
 class Role_Listing(db.Model):
     __tablename__ = 'Role_Listing'
 
@@ -666,6 +678,10 @@ def select_Role_Listing_by_ID(Role_ID):
 @app.route("/apply/<int:Staff_ID>/<int:Role_Listing_ID>")
 def staff_apply_role_listing(Staff_ID, Role_Listing_ID):
     return Role_Application.create_role_application(self = Role_Application, Staff_ID=Staff_ID, Role_Listing_ID=Role_Listing_ID)
+
+@app.route("/getStaffSkills/<int:Staff_ID>")
+def get_staff_skills_by_staff_id(Staff_ID):
+    return Staff.get_staff_skills_by_staff_id(self = Staff, staff_id=Staff_ID)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
