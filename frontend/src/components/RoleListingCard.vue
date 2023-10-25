@@ -42,21 +42,23 @@ export default {
   },
   props: ["id", "name", "description", "expiry", "department", "matchPercentage"],
   methods: {
-    async applyForRole () {
+    async applyForRole() {
       const store = useAppStore();
       const userID = store.getCurrentUserID;
       const roleID = this.id;
+      console.log(userID, roleID)
       try {
-        const response = await axios.post(`http://localhost:5001/api/apply/${userID}/${roleID}`);
+        const response = await axios.post(`http://localhost:5001/apply/${userID}/${roleID}`);
         console.log(response);
-        // if (response.status === 200) {
-        //   alert("Successfully applied for role!");
-        // }
-        // else {
-        //   alert("Failed to apply for role!");
-        // }
+        if (response.status === 200) {
+          alert(response.data);
+        }
+        else {
+          alert(response.data);
+        }
       } catch (error) {
         console.log(error);
+        alert("Failed to apply for role!");
       }
     }
   }

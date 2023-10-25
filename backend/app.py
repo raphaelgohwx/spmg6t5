@@ -675,7 +675,7 @@ def get_staff_skills():
 def select_Role_Listing_by_ID(Role_ID):
     return Role_Listing.skill_match_from_Staff_ID(self = Role_Listing, Role_ID=Role_ID)
 
-@app.route("/apply/<int:Staff_ID>/<int:Role_Listing_ID>")
+@app.route("/apply/<int:Staff_ID>/<int:Role_Listing_ID>", methods=["POST"])
 def staff_apply_role_listing(Staff_ID, Role_Listing_ID):
     return Role_Application.create_role_application(self = Role_Application, Staff_ID=Staff_ID, Role_Listing_ID=Role_Listing_ID)
 
