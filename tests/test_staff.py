@@ -20,7 +20,7 @@ class TestStaff(unittest.TestCase):
     # positive test case -> assert True if all fields are not empty, not null and primary key is unique
     # checks that staff is created into database correctly, queried, and then deleted
     def test_create_staff(self):
-        Staff5 = Staff(7, "Daryl", "Teo", "Junior Engineer", "Engineering Operation Division", "Singapore", "daryl@email.com", "Staff")
+        Staff5 = Staff(999, "Daryl", "Teo", "Junior Engineer", "Engineering Operation Division", "Singapore", "daryl@email.com", "Staff")
         current_number_of_staff = len(Staff5.retrieve_all_Staff_ID())
         assert Staff5.create_staff() == True
         assert current_number_of_staff+1 == len(Staff5.retrieve_all_Staff_ID())

@@ -483,10 +483,7 @@ class Role_Application(db.Model):
 
     # CRUD functions for Role_Application table
     def create_role_application(self, Role_Listing_ID, Staff_ID):
-        # if (self.role_application_is_not_empty(self) == False or self.role_application_is_not_null(self) == False):
-        if (self.role_application_is_not_empty(self) == False):
-            return "Error: One or more fields are empty."
-        elif (Role_Listing_ID not in Role_Listing.retrieve_active_role_listings_ID(self)):
+        if (Role_Listing_ID not in Role_Listing.retrieve_active_role_listings_ID(self)):
             return "Error: Role Listing ID does not exist or is closed."
         elif (Staff_ID not in Staff.retrieve_all_Staff_ID(self)):
             return "Error: Staff ID does not exist."
@@ -552,7 +549,7 @@ class Role_Application(db.Model):
 
             else:
                 cursor = connection.cursor(self)
-                cursor.execute("SELECT Staff_Skill FROM Staff_Skill WHERE Staff_ID = {}".format(Staff_Listing_ID))
+                cursor.execute("SELECT * FROM Staff_Skill WHERE Staff_ID = {}".format(Staff_Listing_ID))
                 rows = cursor.fetchall()
                 cursor.close()
 
@@ -671,9 +668,9 @@ def role_skill_match_staff_ID(Staff_ID):
 def get_staff_skills():
     return Role_Application.get_staff_skills_from_role_application(self = Role_Application)
 
-@app.route("/roleListing/<string:Role_ID>")
-def select_Role_Listing_by_ID(Role_ID):
-    return Role_Listing.skill_match_from_Staff_ID(self = Role_Listing, Role_ID=Role_ID)
+# @app.route("/roleListing/<string:Role_ID>")
+# def select_Role_Listing_by_ID(Role_ID):
+#     return Role_Listing.skill_match_from_Staff_ID(self = Role_Listing, Role_ID=Role_ID)
 
 @app.route("/apply/<int:Staff_ID>/<int:Role_Listing_ID>", methods=["POST"])
 def staff_apply_role_listing(Staff_ID, Role_Listing_ID):
