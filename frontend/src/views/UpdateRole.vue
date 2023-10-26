@@ -127,16 +127,21 @@
 
       async fetchRoleListingData() {
         //API request to fetch the existing role listing data
+
         try {
           const response = await axios.get('http://localhost:5001/getAllRoleListingIds');
           const roleListingData = response.data;
           this.listingIDList = roleListingData
+        // if(this.listingID) {
+          // try {
+          //   const response = await axios.get(`http://localhost:5001/getAllRoleListingData/${this.listingID}`);
+          //   const roleListingData = response.data;
+          //   // this.listingIDList = roleListingData
+          //   this.roleName = roleListingData.Role_Name;
+          //   this.roleDescription = roleListingData.Role_Description;
+          //   this.department = roleListingData.Dept;
+          //   this.closingDate = roleListingData.Date_Closed;
           
-          // Update data properties with the fetched role listing data
-          // this.roleName = roleListingData.name;
-          // this.requiredSkill = roleListingData.skillRequired;
-          // this.department = roleListingData.department;
-          // this.closingDate = roleListingData.closingDate;
         } catch (error) {
           console.error("Error fetching role listing data:", error);
         }
