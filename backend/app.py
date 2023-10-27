@@ -452,12 +452,17 @@ class Role_Listing(db.Model):
                     role_listing_dict[row[0]].append(row[6])
 
         role_skill_match_percentage_dict = {}
+        
         for k,v in role_listing_dict.items():
             count = 0
-            for staff_skill in staff_skill_list:
-                if staff_skill in v:
+            missing_skill = []
+
+            for role_skill in v:
+                if role_skill in staff_skill_list:
                     count += 1
-                role_skill_match_percentage_dict[k] = count/len(v)
+                else:
+                    missing_skill.append(role_skill)
+            role_skill_match_percentage_dict[k] = [count/len(v), missing_skill]
 
         return role_skill_match_percentage_dict
     
