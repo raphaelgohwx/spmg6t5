@@ -17,7 +17,8 @@
             :description="role.Role_Description"
             :expiry="role.Date_Closed.substr(0, 16)"
             :department="role.Dept"
-            :matchPercentage="skillMatch[role.Role_Listing_ID]"
+            :matchPercentage="skillMatch[role.Role_Listing_ID][0]"
+            :missingSkills="skillMatch[role.Role_Listing_ID][1]"
           />
         </template>
       </div>
@@ -84,7 +85,9 @@
               :description="role.Role_Description"
               :expiry="role.Date_Closed.substr(0, 16)"
               :department="role.Dept"
-              :matchPercentage="skillMatch[role.Role_Listing_ID]"
+              :matchPercentage="skillMatch[role.Role_Listing_ID][0]"
+              :missingSkills="skillMatch[role.Role_Listing_ID][1]"
+
             />
           </template>
         </div>
@@ -109,7 +112,8 @@
                 :description="role.Role_Description"
                 :expiry="role.Date_Closed.substr(0, 16)"
                 :department="role.Dept"
-                :matchPercentage="skillMatch[role.Role_Listing_ID]"
+                :matchPercentage="skillMatch[role.Role_Listing_ID][0]"
+                :missingSkills="skillMatch[role.Role_Listing_ID][1]"
               />
             </template>
           </template>

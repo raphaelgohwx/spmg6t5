@@ -19,6 +19,18 @@
           </v-card-actions>
         </v-item-group>
 
+        <v-item-group>
+          <v-item v-if="skillsGap.length != 0">
+            <b>Missing Skills:</b>
+            <div v-for="skill in skillsGap">
+              {{ skill }}
+            </div>
+          </v-item>
+
+          <v-item v-else>
+            Your suit the role perfectly!
+          </v-item>
+        </v-item-group>
         
           <v-progress-linear v-if="match !== null" v-model="match"  color="blue-lighten-3" height="25" rounded>
           <template v-slot:default="{ value }">
@@ -38,9 +50,10 @@ export default {
   data() {
     return{
       match: Math.round(this.matchPercentage * 100),
+      skillsGap: this.missingSkills,
     }
   },
-  props: ["id", "name", "description", "expiry", "department", "matchPercentage"],
+  props: ["id", "name", "description", "expiry", "department", "matchPercentage","missingSkills"],
   methods: {
     async applyForRole() {
       const store = useAppStore();

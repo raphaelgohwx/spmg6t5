@@ -17,6 +17,19 @@
             <v-btn variant="outlined"> Apply </v-btn>
         </v-item-group>
 
+        <v-item-group>
+          <v-item v-if="skillsGap.length != 0">
+            <b>Missing Skills:</b>
+            <div v-for="skill in skillsGap">
+              {{ skill }}
+            </div>
+          </v-item>
+
+          <v-item v-else>
+            Your suit the role perfectly!
+          </v-item>
+        </v-item-group>
+
         <v-progress-linear
           v-if="match !== null"
           v-model="match"
@@ -63,22 +76,24 @@
 export default {
   data() {
     return {
-      Applicants: [
-        {
-          name: "Applicant 1",
-          skills: ["Skill 1", "Skill 2"],
-          score: 50,
-        },
-        {
-          name: "Applicant 2",
-          skills: ["Skill 1", "Skill 2", "Skill 3"],
-          score: 75,
-        },
-      ],
-      match: Math.round(this.matchPercentage * 100)
+      // Applicants should follow this format
+      // Applicants: [
+      //   {
+      //     name: "Applicant 1",
+      //     skills: ["Skill 1", "Skill 2"],
+      //     score: 50,
+      //   },
+      //   {
+      //     name: "Applicant 2",
+      //     skills: ["Skill 1", "Skill 2", "Skill 3"],
+      //     score: 75,
+      //   },
+      // ],
+      match: Math.round(this.matchPercentage * 100),
+      skillsGap: this.missingSkills,
     };
   },
-  props: ["name", "description", "expiry", "department", "matchPercentage"],
+  props: ["name", "description", "expiry", "department", "matchPercentage","missingSkills"],
 };
 </script>
 
