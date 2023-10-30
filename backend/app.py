@@ -738,7 +738,7 @@ def get_staff_skills_by_staff_id(Staff_ID):
 
 @app.route("/roleSkillMatch/all")
 def retrieve_all_applicants_and_skills():
-    return Role_Application.raphaels_method(self = Role_Application)
+    return jsonify(Role_Application.raphaels_method(self = Role_Application))
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
