@@ -565,7 +565,58 @@ class Role_Application(db.Model):
 
                 role_application_dict[Role_Listing_ID].append(staff_skill_dict)
 
-        return jsonify(role_application_dict)
+        return role_application_dict
+
+    def raphaels_method(self):
+        cursor = connection.cursor(self)
+        cursor.execute("SELECT * FROM Role_Application")
+        rows = cursor.fetchall()
+        cursor.close()
+
+        role_application_dict = {}
+        for row in rows:
+            Role_Listing_ID = row[0]
+            Staff_Listing_ID = row[1]
+            
+            if Role_Listing_ID not in role_application_dict:
+
+                cursor = connection.cursor(self)
+                cursor.execute("SELECT s.Staff_FName, s.Staff_LName,ss.Skill_Name from Staff_Skill as ss INNER JOIN Staff as s ON ss.Staff_ID=s.Staff_ID WHERE ss.Staff_ID = {}".format(Staff_Listing_ID))
+                rows = cursor.fetchall()
+                cursor.close()
+            
+                staff_skill_dict = {}
+                staff_name = rows[0][0]+" "+rows[0][1]
+                staff_skill_dict[staff_name] = []
+                for row in rows:
+                    staff_skill_dict[staff_name].append(row[2])
+                    
+                cursor = connection.cursor(self)
+                cursor.execute("SELECT rs.Skill_Name FROM Role_Skill as rs INNER JOIN Role_Listing as rl ON rl.Role_Name=rs.Role_Name WHERE rl.Role_Listing_ID={}".format(Role_Listing_ID))
+                rows = cursor.fetchall()
+                cursor.close()
+                role_skills = []
+
+                for row in rows:
+                    role_skills.append(row[0])
+
+                role_application_dict[Role_Listing_ID] = (role_skills,staff_skill_dict)
+
+            else:
+                cursor = connection.cursor(self)
+                cursor.execute("SELECT s.Staff_FName, s.Staff_LName,ss.Skill_Name from Staff_Skill as ss INNER JOIN Staff as s ON ss.Staff_ID=s.Staff_ID WHERE ss.Staff_ID = {}".format(Staff_Listing_ID))
+                rows = cursor.fetchall()
+                cursor.close()
+
+                staff_name = rows[0][0]+" "+rows[0][1]
+
+                temp = {staff_name : []}
+                for row in rows:
+                    temp[staff_name].append(row[2])
+                role_application_dict[Role_Listing_ID][1].update(temp)
+                # role_application_dict[Role_Listing_ID][1].append(staff_skill_dict)
+
+        return role_application_dict
     
 
 # class Role_Skill(db.Model):
@@ -671,7 +722,7 @@ def role_skill_match_staff_ID(Staff_ID):
 
 @app.route("/getStaffSkills")
 def get_staff_skills():
-    return Role_Application.get_staff_skills_from_role_application(self = Role_Application)
+    return jsonify(Role_Application.get_staff_skills_from_role_application(self = Role_Application))
 
 # @app.route("/roleListing/<string:Role_ID>")
 # def select_Role_Listing_by_ID(Role_ID):
@@ -684,6 +735,10 @@ def staff_apply_role_listing(Staff_ID, Role_Listing_ID):
 @app.route("/getStaffSkills/<int:Staff_ID>")
 def get_staff_skills_by_staff_id(Staff_ID):
     return Staff.get_staff_skills_by_staff_id(self = Staff, staff_id=Staff_ID)
+
+@app.route("/roleSkillMatch/all")
+def retrieve_all_applicants_and_skills():
+    return Role_Application.raphaels_method(self = Role_Application)
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
