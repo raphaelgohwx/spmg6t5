@@ -14,10 +14,10 @@
           <!-- Button to update role listing -->
 
             <v-btn variant="outlined" to="/UpdateRole">Update Role</v-btn>
-            <v-btn variant="outlined"> Apply </v-btn>
+            <!-- <v-btn variant="outlined"> Apply </v-btn> -->
         </v-item-group>
 
-        <v-item-group>
+        <!-- <v-item-group>
           <v-item v-if="skillsGap.length != 0">
             <b>Missing Skills:</b>
             <div v-for="skill in skillsGap">
@@ -28,9 +28,9 @@
           <v-item v-else>
             Your suit the role perfectly!
           </v-item>
-        </v-item-group>
+        </v-item-group> -->
 
-        <v-progress-linear
+        <!-- <v-progress-linear
           v-if="match !== null"
           v-model="match"
           color="blue-lighten-3"
@@ -40,26 +40,30 @@
           <template v-slot:default="{ value }">
             <strong>{{ value }}% Skills Match</strong>
           </template>
-        </v-progress-linear>
+        </v-progress-linear> -->
       </div>
     </v-card-item>
 
     <v-divider></v-divider>
 
-    <v-expansion-panels>
-      <v-expansion-panel title="Applicants" expand-icon="mdi-account-group">
+    <!-- <template v-if="roleListingInfo != null">
+      {{ roleListingInfo[1] }}
+    </template> -->
+
+    <v-expansion-panels >
+      <v-expansion-panel v-if="roleListingInfo != null" title="Applicants" expand-icon="mdi-account-group">
         <v-expansion-panel-text>
-          <v-row v-for="applicant in Applicants">
-            <v-col cols="4">{{ applicant.name }}</v-col>
-            <v-col cols="4">{{ applicant.score }}%</v-col>
-            <v-col cols="4">
+          <v-row v-for="(skills, staff) in roleListingInfo[1]">
+            <v-col cols="6">{{ staff }}</v-col>
+            <!-- <v-col cols="4">{{ applicant.score }}%</v-col> -->
+            <v-col cols="6">
               <v-expansion-panels>
-                <v-expansion-panel title="Skills">
+                <v-expansion-panel title="View Skills">
                   <v-expansion-panel-text>
                     <v-row class="mt-2">
-                      <v-col cols="12" v-for="skill in applicant.skills">{{
-                        skill
-                      }}</v-col>
+                      <v-col cols="12" v-for="skill in skills">
+                        {{ skill }}
+                      </v-col>
                     </v-row>
                   </v-expansion-panel-text>
                 </v-expansion-panel>
@@ -67,6 +71,9 @@
             </v-col>
           </v-row>
         </v-expansion-panel-text>
+      </v-expansion-panel>
+
+      <v-expansion-panel v-else title="There are no applicants for this role" expand-icon="mdi-account-group">
       </v-expansion-panel>
     </v-expansion-panels>
   </v-card>
@@ -91,9 +98,10 @@ export default {
       // ],
       match: Math.round(this.matchPercentage * 100),
       skillsGap: this.missingSkills,
+      roleListingInfo: this.roleListingData,
     };
   },
-  props: ["name", "description", "expiry", "department", "matchPercentage","missingSkills"],
+  props: ["name", "description", "expiry", "department", "matchPercentage","missingSkills","roleListingData"],
 };
 </script>
 

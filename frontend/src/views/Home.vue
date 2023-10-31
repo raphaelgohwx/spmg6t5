@@ -1,7 +1,7 @@
 <template>
   <div>
     <navbar />
-    {{ skillMatch }}
+    <!-- {{ skillMatch }} -->
     <p v-if="store.getCurrentUser == null" class="text-center text-h4">
       Please Log In to Access
     </p>
@@ -9,16 +9,16 @@
     <div
       v-if="store.getCurrentUser == 'Manager' || store.getCurrentUser == 'HR'"
     >
+      <!-- {{ this.roleListingData }} -->
       <div class="text-center text-h4">Welcome {{ store.getCurrentUser }}</div>
-      <div v-if="this.staff_roles.length != 0">
+      <div v-if="this.staff_roles.length != 0 && this.roleListingData != null">
         <template v-for="role in staff_roles">
           <RoleListingCardforManager
             :name="role.Role_Name"
             :description="role.Role_Description"
             :expiry="role.Date_Closed.substr(0, 16)"
             :department="role.Dept"
-            :matchPercentage="skillMatch[role.Role_Listing_ID][0]"
-            :missingSkills="skillMatch[role.Role_Listing_ID][1]"
+            :roleListingData="roleListingData[role.Role_Listing_ID]"
           />
         </template>
       </div>
@@ -150,7 +150,14 @@ export default {
       deptFilter: null,
       skillFilter: null,
       closingDateFilter: null,
-      depts: [],
+      depts: [
+        "IT",
+        "Sales",
+        "Consultancy",
+        "HR and Admin",
+        "Finance",
+        "Engineering Operation Division"
+      ],
       skills: [
         "Attention to Detail",
         "Stakeholder Management",
@@ -166,6 +173,7 @@ export default {
       ],
       filteredRoles: [],
       minDate: '',
+      roleListingData: null
     };
   },
   setup() {
@@ -177,12 +185,11 @@ export default {
       watch(() => store.getCurrentUserID, () => {
         axios.get(`http://localhost:5001/roleSkillMatch/${store.getCurrentUserID}`)
         .then((res) => 
-          skillMatch.value = res.data,
-          console.log(skillMatch)
+          skillMatch.value = res.data
         )
         .catch((err) => {
           console.log(err)
-        })
+        });
       })
     })
 
@@ -194,33 +201,49 @@ export default {
     RoleListingCardforManager,
   },
   mounted() {
-    this.getDeptNames();
+    // const getDeptNames = async() => {
+    //     try {
+    //       const response = await axios.get("http://localhost:5001/getDeptNames");
+    //       this.depts = response.data;
+    //     }
+    //     catch (error) {
+    //       console.log(error)
+    //     }
+    //   }
+
+    //   getDeptNames();
+  },
+
+  beforeCreate() {
+      
+
+      // Definitely running already but the data can't be displayed
+      const fetchRoleSkillMatchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:5001/roleSkillMatch/all");
+        console.log(response.data)
+        this.roleListingData = response.data
+      } catch (error) {
+        console.log(error);
+      }
+      };
+
+      // Call the async function
+      fetchRoleSkillMatchData();
+      
   },
   created() {
-    ApiService.getActiveRoleListings().then((res) => {
+    ApiService.getActiveRoleListings()
+    .then((res) => {
       this.staff_roles = res.data;
-    });
+    })
+    .catch((err) => console.log(err));
   },
   methods: {
-    // startInterval() {
-    //   const intervalTime = 1500; // 500 milliseconds (1/2 second)
-    //   let index = 0;
-
-    //   const intervalId = setInterval(() => {
-    //     if (index < this.staff_roles.length) {
-    //       this.displayed_roles.push(this.staff_roles[index]);
-    //       index++;
-    //     } else {
-    //       clearInterval(intervalId); // Stop the interval when all roles are displayed.
-    //       this.finished = true
-    //     }
-    //   }, intervalTime);
+    // async getDeptNames() {
+    //   const response = await axios.get("http://localhost:5001/getDeptNames");
+    //   this.depts = response.data;
     // },
-
-    async getDeptNames() {
-      const response = await axios.get("http://localhost:5001/getDeptNames");
-      this.depts = response.data;
-    },
 
     async filterRoleListingsBySkill() {
       try {
