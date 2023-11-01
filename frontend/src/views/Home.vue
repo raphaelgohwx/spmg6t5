@@ -14,6 +14,7 @@
       <div v-if="this.staff_roles.length != 0 && this.roleListingData != null">
         <template v-for="role in staff_roles">
           <RoleListingCardforManager
+            :id="role.Role_Listing_ID"
             :name="role.Role_Name"
             :description="role.Role_Description"
             :expiry="role.Date_Closed.substr(0, 16)"

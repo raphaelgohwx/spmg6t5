@@ -4,6 +4,7 @@
       <div>
         <div class="text-overline mb-1">Department: {{ department }}</div>
         <div class="text-h6 mb-1">{{ name }}</div>
+        <div class="text-subtitle-2 mb-1">Role ID: {{ id }}</div>
         <div class="text-caption">
           {{ description }}
         </div>
@@ -13,7 +14,7 @@
         <v-item-group class="d-flex pa-2 justify-end">
           <!-- Button to update role listing -->
 
-            <v-btn variant="outlined" to="/UpdateRole">Update Role</v-btn>
+            <v-btn variant="outlined" :to="'/UpdateRole/'+id">Update Role</v-btn>
             <!-- <v-btn variant="outlined"> Apply </v-btn> -->
         </v-item-group>
 
@@ -101,7 +102,7 @@ export default {
       roleListingInfo: this.roleListingData,
     };
   },
-  props: ["name", "description", "expiry", "department", "matchPercentage","missingSkills","roleListingData"],
+  props: ["id","name", "description", "expiry", "department", "matchPercentage"],
 };
 </script>
 

@@ -7,10 +7,10 @@
       <form @submit.prevent="updateRoleListing" class="role-listing-form">
         <div class="form-group">
           <label for="listingID">Listing ID:</label>
-          <select id="listingID" v-model="listingID" required>
-              <option :value="null" disabled selected>Select Role</option>
-              <option v-for="listing in listingIDList" :key="listing" :value="listing">{{ listing }}</option>
-            </select>
+          <v-text-field id="listingID" v-model="listingID" required>
+              <!-- <option :value="null" disabled selected>Select Role</option>
+              <option v-for="listing in listingIDList" :key="listing" :value="listing">{{ listing }}</option> -->
+            </v-text-field>
         </div>
 
         <div class="form-group">
@@ -46,10 +46,9 @@
               Note: Please select a department.
             </span>
         </div>
-
         <div class="form-group">
           <label for="closingDate">Closing Date:</label>
-          <input type="date" id="closingDate" v-model="closingDate" required />
+          <v-text-field type="date" v-model="closingDate" required />
           <span v-if="!this.closingDateValidation()" class="error">
               Note: Please select a closing date in the future.
             </span>
@@ -70,7 +69,7 @@
     data() {
       return {
         //fetch existing role listing data
-        listingID: "",
+        listingID: this.$route.params.id,
         listingIDList: "",
         roleName: "",        
         roleDescription: "",   
@@ -100,11 +99,23 @@
       };
     },
     mounted() {
+      console.log("Listing ID:", this.listingID);
+      // Access the id route parameter
+      this.listingID = this.$route.params.id;
       // Fetch existing role listing data from the backend
       this.fetchRoleListingData();
 
     },
     methods: {
+      formattedDate(dateInput){
+        // change and return date input to YYYY-MM-DD format
+        const date = new Date(dateInput);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1;
+        const day = date.getDate();
+        const formattedDate = `${year}-${month < 10 ? '0' + month : month}-${day < 10 ? '0' + day : day}`;
+        return formattedDate;
+      },
       // For visuals only
       resizeTextarea() {
         const textarea = document.getElementById('roleDescription');
@@ -128,24 +139,29 @@
       async fetchRoleListingData() {
         //API request to fetch the existing role listing data
 
-        try {
-          const response = await axios.get('http://localhost:5001/getAllRoleListingIds');
-          const roleListingData = response.data;
-          this.listingIDList = roleListingData
-        // if(this.listingID) {
-          // try {
-          //   const response = await axios.get(`http://localhost:5001/getAllRoleListingData/${this.listingID}`);
-          //   const roleListingData = response.data;
-          //   // this.listingIDList = roleListingData
-          //   this.roleName = roleListingData.Role_Name;
-          //   this.roleDescription = roleListingData.Role_Description;
-          //   this.department = roleListingData.Dept;
-          //   this.closingDate = roleListingData.Date_Closed;
+        // try {
+        //   const response = await axios.get('http://localhost:5001/getAllRoleListingIds');
+        //   const roleListingData = response.data;
+        //   this.listingIDList = roleListingData
+        if(this.listingID) {
+          try {
+            const response = await axios.get(`http://localhost:5001/selectRoleListingByID/${this.listingID}`);
+            console.log(this.listingID)
+            const roleListingData = response.data;
+            console.log(roleListingData)
+            // this.listingIDList = roleListingData
+            this.listingID = roleListingData[0];
+            this.roleName = roleListingData[1];
+            this.roleDescription = roleListingData[3];
+            this.department = roleListingData[4];
+            this.closingDate = this.formattedDate(roleListingData[2]);
+            console.log(closingDate)
           
         } catch (error) {
           console.error("Error fetching role listing data:", error);
         }
-      },
+      }
+    },
 
       async updateRoleListing() {
         // Create an object with updated role listing data

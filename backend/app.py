@@ -466,10 +466,11 @@ class Role_Listing(db.Model):
 
         return role_skill_match_percentage_dict
     
-    def select_Role_Listing_by_ID(self, Role_ID):
-        if (Role_ID) in Role_Listing.retrieve_all_role_listing_ID(self):
+    def select_Role_Listing_by_ID(self, Role_Listing_ID):
+        if int(Role_Listing_ID) in Role_Listing.retrieve_all_role_listing_ID(self):
             cursor = connection.cursor(self)
-            cursor.execute("SELECT * FROM Role_Listing WHERE Role_Listing_ID = %s", (Role_ID,))
+            sql_query = "SELECT * FROM Role_Listing WHERE Role_Listing_ID = {}".format(Role_Listing_ID)
+            cursor.execute(sql_query)
             result = cursor.fetchall()
             cursor.close()
             return result[0]
@@ -724,9 +725,9 @@ def role_skill_match_staff_ID(Staff_ID):
 def get_staff_skills():
     return jsonify(Role_Application.get_staff_skills_from_role_application(self = Role_Application))
 
-# @app.route("/roleListing/<string:Role_ID>")
-# def select_Role_Listing_by_ID(Role_ID):
-#     return Role_Listing.skill_match_from_Staff_ID(self = Role_Listing, Role_ID=Role_ID)
+@app.route("/selectRoleListingByID/<string:Role_Listing_ID>")
+def select_role_listing_by_id(Role_Listing_ID):
+    return jsonify(Role_Listing.select_Role_Listing_by_ID(self = Role_Listing, Role_Listing_ID=Role_Listing_ID))
 
 @app.route("/apply/<int:Staff_ID>/<int:Role_Listing_ID>", methods=["POST"])
 def staff_apply_role_listing(Staff_ID, Role_Listing_ID):
@@ -739,6 +740,7 @@ def get_staff_skills_by_staff_id(Staff_ID):
 @app.route("/roleSkillMatch/all")
 def retrieve_all_applicants_and_skills():
     return jsonify(Role_Application.raphaels_method(self = Role_Application))
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5001)
