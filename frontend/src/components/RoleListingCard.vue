@@ -1,5 +1,8 @@
 <template>
-  <v-card class="ma-6" max-width="95%" color="primary">
+  <v-card v-if="!loading" class="ma-6" max-width="95%" color="primary">
+    {{ isRepeatApplication }}
+    {{ id }}
+    {{ this.userID }}
     <v-card-item>
       <div>
         <div class="text-overline mb-1">Department: {{ department }}</div>
@@ -14,7 +17,7 @@
           </v-item>
 
           <v-card-actions>
-            <v-btn v-if="match !== 0" variant="outlined" @click="applyForRole"> Apply </v-btn>
+            <v-btn v-if="match !== 0 && !isRepeatApplication" variant="outlined" @click="applyForRole"> Apply </v-btn>
             <v-btn v-else variant="outlined" disabled> Apply </v-btn>
           </v-card-actions>
         </v-item-group>
@@ -51,17 +54,26 @@ export default {
     return{
       match: Math.round(this.matchPercentage * 100),
       skillsGap: this.missingSkills,
+      userID: null,
+      isRepeatApplication: null,
+      loading: true
     }
   },
   props: ["id", "name", "description", "expiry", "department", "matchPercentage","missingSkills"],
+
+  async mounted() {
+    const store = useAppStore();
+    this.userID = store.getCurrentUserID;
+    this.isRepeatApplication = await this.isApplicationSubmitted();
+    if (this.isRepeatApplication !== null) {
+      this.loading = false;
+    }
+  },
   methods: {
     async applyForRole() {
-      const store = useAppStore();
-      const userID = store.getCurrentUserID;
       const roleID = this.id;
-      console.log(userID, roleID)
       try {
-        const response = await axios.post(`http://localhost:5001/apply/${userID}/${roleID}`);
+        const response = await axios.post(`http://localhost:5001/apply/${this.userID}/${roleID}`);
         console.log(response);
         if (response.status === 200) {
           alert(response.data);
@@ -72,6 +84,26 @@ export default {
       } catch (error) {
         console.log(error);
         alert("Failed to apply for role!");
+      }
+    },
+    async isApplicationSubmitted() {
+      const roleID = this.id;
+      try {
+        const response = await axios.get(`http://localhost:5001/getAllRoleApplications`);
+        if (response.status === 200) {
+          for (let i = 0; i < response.data.length; i++) {
+            if (parseInt(response.data[i][0]) == parseInt(roleID) && parseInt(response.data[i][1]) == parseInt(this.userID)) {
+              return true;
+            }
+          }
+            return false;        
+        }
+        else {
+          return false;
+        }
+      } catch (error) {
+        console.log("Error:" + error);
+        return false;
       }
     }
   }
