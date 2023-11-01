@@ -11,6 +11,9 @@
     >
       <!-- {{ this.roleListingData }} -->
       <div class="text-center text-h4">Welcome {{ store.getCurrentUser }}</div>
+      <div v-if="store.getCurrentUser == 'HR'" > 
+        <RouterLink to="/RoleCreation"> <v-btn class="rolebtn">Create a Role Listing</v-btn></RouterLink>
+      </div>
       <div v-if="this.staff_roles.length != 0 && this.roleListingData != null">
         <template v-for="role in staff_roles">
           <RoleListingCardforManager
@@ -350,4 +353,21 @@ export default {
   margin-left: 10px;
   display: inline-block; /* Added to make it inline */
 }
+
+.rolebtn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: block;
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.rolebtn:hover {
+  background-color: #0056b3; 
+  /* darker when you hover over it */
+}
+
 </style>

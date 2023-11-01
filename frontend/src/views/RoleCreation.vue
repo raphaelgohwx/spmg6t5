@@ -76,7 +76,15 @@
                 "Sales Manager",
                 "Senior Engineer",
                 "Support Team"],
-        depts: [],
+        // depts: [],
+        depts: [
+        "IT",
+        "Sales",
+        "Consultancy",
+        "HR and Admin",
+        "Finance",
+        "Engineering Operation Division"
+      ],
       };
     },
     mounted() {
@@ -88,7 +96,7 @@
     // this.getAllRoleNames(); 
 
     // get all role departments for dropdown
-    this.getAllRoleDepts();
+    // this.getAllRoleDepts();
     },
     
     methods: {

@@ -84,12 +84,12 @@ export default {
       username: "",
       staff_list: [],
       tab: null,
-      items: [
-        { label: "Learning Journeys" },
-        { label: "Skills" },
-        { label: "Courses" },
-        { label: "Jobs" },
-      ],
+      // items: [
+      //   { label: "Learning Journeys" },
+      //   { label: "Skills" },
+      //   { label: "Courses" },
+      //   { label: "Jobs" },
+      // ],
     };
   },
   methods: {
@@ -113,3 +113,14 @@ export default {
   created() {},
 };
 </script>
+
+<style>
+/* Create a dropwdown list where names are clearly visible in a line */
+.v-list-item-content {
+  flex: 1; /* Allow the content to expand */
+}
+
+.v-list-item {
+  min-width: 200px; /* Set the width of the list item to accommodate the content */
+}
+</style>
