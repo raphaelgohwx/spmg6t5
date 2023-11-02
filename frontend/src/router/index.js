@@ -3,8 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 const routes = [
   {
-    path: '',
-    component: () => import('@/views/Home.vue'),
+    path: '/',
+    component: () => import('@/views/Login.vue'),
     // children: [
     //   {
     //     path: '',
@@ -15,6 +15,11 @@ const routes = [
     //     component: () => import(/* webpackChunkName: "home" */ '@/views/Home.vue'),
     //   },
     // ],
+  },
+  {
+    path:'/home',
+    component: () => import('@/views/Home.vue'),
+    name:'home'
   },
   {
     path:'/staff',

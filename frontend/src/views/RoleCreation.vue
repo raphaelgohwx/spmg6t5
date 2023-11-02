@@ -161,7 +161,7 @@
           // Handle the response here, you can show a success message or handle errors
           if (response.data == "Success") {
             alert("Role listing created successfully!");
-            this.$router.push('/');
+            this.$router.push('/Home');
           } else {
             alert("Failed to create role listing");
               }
