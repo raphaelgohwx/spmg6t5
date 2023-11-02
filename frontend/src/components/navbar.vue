@@ -101,6 +101,7 @@ export default {
     // },
     saveToState(role,userID) {
       this.appStore.saveResponsetoStore(role,userID);
+      this.$router.push("/Home")
       
       // this.$router.push({ name: role.toLowerCase() });
     },
