@@ -568,7 +568,7 @@ class Role_Application(db.Model):
 
         return role_application_dict
 
-    def raphaels_method(self):
+    def retrieve_all_applicants_and_skills(self):
         cursor = connection.cursor(self)
         cursor.execute("SELECT * FROM Role_Application")
         rows = cursor.fetchall()
@@ -739,7 +739,7 @@ def get_staff_skills_by_staff_id(Staff_ID):
 
 @app.route("/roleSkillMatch/all")
 def retrieve_all_applicants_and_skills():
-    return jsonify(Role_Application.raphaels_method(self = Role_Application))
+    return jsonify(Role_Application.retrieve_all_applicants_and_skills(self = Role_Application))
 
 
 if __name__ == "__main__":
