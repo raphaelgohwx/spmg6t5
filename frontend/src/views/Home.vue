@@ -216,32 +216,64 @@ export default {
     //   }
 
     //   getDeptNames();
+
+    
   },
 
   beforeCreate() {
-      
+      // const fetchRoleSkillMatchData = async () => {
+      // try {
+      //   const response = await axios.get("http://localhost:5001/roleSkillMatch/all");
+      //   console.log(response.data)
+      //   this.roleListingData = response.data
+      // } catch (error) {
+      //   console.log(error);
+      // }
+      // };
 
-      // Definitely running already but the data can't be displayed
-      const fetchRoleSkillMatchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:5001/roleSkillMatch/all");
-        console.log(response.data)
-        this.roleListingData = response.data
-      } catch (error) {
-        console.log(error);
-      }
-      };
+      // // Call the async function
+      // fetchRoleSkillMatchData();
 
-      // Call the async function
-      fetchRoleSkillMatchData();
-      
-  },
-  created() {
-    ApiService.getActiveRoleListings()
+    //   const getActiveRoleListings = async () => {
+    //   try {
+    //     const response = await axios.get("http://localhost:5001/getActiveRoleListings");
+    //     this.roleListingData = response.data
+    //     console.log(this.roleListingData)
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    //   };
+
+    // getActiveRoleListings();
+
+    axios.get("http://localhost:5001/getActiveRoleListings")
     .then((res) => {
       this.staff_roles = res.data;
+
+      axios.get("http://localhost:5001/roleSkillMatch/all")
+      .then((res) => {
+        this.roleListingData = res.data;
+      })
+      .catch((err) => console.log(err))
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err))
+  },
+  created() {
+    // ApiService.getActiveRoleListings()
+    // .then((res) => {
+    //   this.staff_roles = res.data;
+    // })
+    // .catch((err) => console.log(err));
+    // axios.all([
+    //   axios.get("http://localhost:5001/getActiveRoleListings"),
+    //   axios.get("http://localhost:5001/roleSkillMatch/all")
+    // ])
+    // .then(axios.spread((response1, response2) => {
+    //   this.staff_roles=response1
+    //   this.roleListingData=response2
+    // }))
+    // .catch((err) => console.log(err))
+    
   },
   methods: {
     // async getDeptNames() {

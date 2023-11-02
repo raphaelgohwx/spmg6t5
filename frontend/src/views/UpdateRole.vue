@@ -53,7 +53,7 @@
               Note: Please select a closing date in the future.
             </span>
         </div>
-        <button type="submit" class="btn btn-primary" :disabled="formValidation()">Update Role Listing</button>
+        <button type="submit" class="btn btn-primary" :disabled="formValidation()">Save</button>
       </form>
     </div>
   </template>
