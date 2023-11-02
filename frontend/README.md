@@ -1,57 +1,46 @@
-# essentials
+# Introduction
+- Add your project logo.
+- Write a short introduction to the project.
+- If you are using badges, add them here.
 
-## Project setup
+## Index
+- [Setup](#setup)
+  - [Pre-Requisites](#pre-requisites)
+  - [Database Setup](#database-setup)
+  - [Install Dependencies](#install-dependencies)
+  - [Launching the Webpage](#launching-the-webpage)
+  - [Running the Backend](#running-the-backend)
+- [Usage](#usage)
 
+## Setup
+### Pre-Requisites
+- Code Editor
+- SQL Workbench
+
+### Database Setup
+1. Open SQL Workbench
+2.
+
+### Install Dependencies
 ```
-# yarn
-yarn
-
-# npm
-npm install
-
-# pnpm
-pnpm install
-```
-
-### Compiles and hot-reloads for development
-
-```
-# yarn
-yarn dev
-
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-```
-
-### Compiles and minifies for production
-
-```
-# yarn
-yarn build
-
-# npm
-npm run build
-
-# pnpm
-pnpm build
+$ cd frontend
+$ npm install
 ```
 
-### Lints and fixes files
-
+### Launching the Webpage
+On a new terminal:
 ```
-# yarn
-yarn lint
-
-# npm
-npm run lint
-
-# pnpm
-pnpm lint
+$ cd frontend
+$ npm run dev
 ```
 
-### Customize configuration
+### Running the Backend
+On a new terminal:
+```
+$ cd backend
+$ python app.py
+```
 
-See [Configuration Reference](https://vitejs.dev/config/).
+## Usage
+### Happy Path
+1. Log into
