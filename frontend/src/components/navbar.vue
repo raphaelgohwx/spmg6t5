@@ -5,7 +5,7 @@
       <!-- <v-app-bar-nav-icon></v-app-bar-nav-icon> -->
 
       <v-toolbar-title>
-        <v-btn icon to="/">
+        <v-btn icon to="">
           LJPS
         </v-btn>
         
