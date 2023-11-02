@@ -42,7 +42,7 @@
               Note: Please select a closing date in the future.
             </span>
         </div>
-        <button type="submit" class="btn btn-primary" :disabled="formValidation()">Create Role Listing</button>    
+        <button type="submit" class="btn btn-primary" :disabled="formValidation()">Create Role Listing</button>   
       </form>
     </div>
   </template>
@@ -161,6 +161,7 @@
           // Handle the response here, you can show a success message or handle errors
           if (response.data == "Success") {
             alert("Role listing created successfully!");
+            this.$router.push('/');
           } else {
             alert("Failed to create role listing");
               }
