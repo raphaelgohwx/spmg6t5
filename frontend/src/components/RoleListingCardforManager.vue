@@ -102,7 +102,7 @@ export default {
       roleListingInfo: this.roleListingData,
     };
   },
-  props: ["id","name", "description", "expiry", "department", "matchPercentage"],
+  props: ["id","name", "description", "expiry", "department", "matchPercentage", "roleListingData"],
 };
 </script>
 

@@ -1,8 +1,8 @@
 <template>
   <v-card v-if="!loading" class="ma-6" max-width="95%" color="primary">
-    {{ isRepeatApplication }}
+    <!-- {{ isRepeatApplication }}
     {{ id }}
-    {{ this.userID }}
+    {{ this.userID }} -->
     <v-card-item>
       <div>
         <div class="text-overline mb-1">Department: {{ department }}</div>
@@ -18,9 +18,13 @@
 
           <v-card-actions>
             <v-btn v-if="match !== 0 && !isRepeatApplication" variant="outlined" @click="applyForRole"> Apply </v-btn>
-            <v-btn v-else variant="outlined" disabled> Apply </v-btn>
+            <v-btn v-else-if="match == 0" variant="outlined" disabled> Unqualified </v-btn>
+            <v-btn v-else variant="outlined" disabled> Applied </v-btn>
+            
           </v-card-actions>
         </v-item-group>
+
+        
 
         <v-item-group>
           <v-item v-if="skillsGap.length != 0">
