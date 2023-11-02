@@ -178,6 +178,7 @@
           const response = await axios.put('http://localhost:5001/updateRoleListing', updatedRoleListing); 
           if (response.status === 200) {
             alert("Role listing updated successfully!");
+            this.$router.push('/');
           } else {
             alert("Failed to update role listing");
           }
