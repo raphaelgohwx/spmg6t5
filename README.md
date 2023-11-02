@@ -1,20 +1,46 @@
-# spmg6t5
+# Introduction
+- Add your project logo.
+- Write a short introduction to the project.
+- If you are using badges, add them here.
 
-# Set up
-1. Connect to SQL Database
-- steps (pls fill in elijah)
-2. Open your terminal
-- Type "cd frontend"
-- Type "npm install" to install all dependencies
+## Index
+- [Setup](#setup)
+  - [Pre-Requisites](#pre-requisites)
+  - [Database Setup](#database-setup)
+  - [Install Dependencies](#install-dependencies)
+  - [Launching the Webpage](#launching-the-webpage)
+  - [Running the Backend](#running-the-backend)
+- [Usage](#usage)
 
-# How to run
-1. Open your terminal
-2. Type "cd backend"
-3. Type "python app.py" to start the backend servicce
-4. Open another terminal
-5. Type "cd frontend"
-6. Type "npm run dev" to start the frontend webpage
-7. Enjoy the app
+## Setup
+### Pre-Requisites
+- Code Editor
+- SQL Workbench
 
-# to run pytest
-python -m pytest
+### Database Setup
+1. Open SQL Workbench
+2.
+
+### Install Dependencies
+```
+$ cd frontend
+$ npm install
+```
+
+### Launching the Webpage
+On a new terminal:
+```
+$ cd frontend
+$ npm run dev
+```
+
+### Running the Backend
+On a new terminal:
+```
+$ cd backend
+$ python app.py
+```
+
+## Usage
+### Happy Path
+1. Log into
