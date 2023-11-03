@@ -17,8 +17,8 @@
           </v-item>
 
           <v-card-actions>
-            <v-btn v-if="match !== 0 && !isRepeatApplication" variant="outlined" @click="applyForRole"> Apply </v-btn>
-            <v-btn v-else-if="match == 0" variant="outlined" disabled> Unqualified </v-btn>
+            <v-btn v-if="match == 0" variant="outlined" disabled> Unqualified </v-btn>
+            <v-btn v-else-if="match !== 0 && !isRepeatApplication" variant="outlined" @click="applyForRole"> Apply </v-btn> 
             <v-btn v-else variant="outlined" disabled> Applied </v-btn>
             
           </v-card-actions>
