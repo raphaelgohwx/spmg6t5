@@ -7,7 +7,7 @@
       <form @submit.prevent="updateRoleListing" class="role-listing-form">
         <div class="form-group">
           <label for="listingID">Listing ID:</label>
-          <v-text-field id="listingID" v-model="listingID" required>
+          <v-text-field id="listingID" v-model="listingID" required readonly>
               <!-- <option :value="null" disabled selected>Select Role</option>
               <option v-for="listing in listingIDList" :key="listing" :value="listing">{{ listing }}</option> -->
             </v-text-field>
