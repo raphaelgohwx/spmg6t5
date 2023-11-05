@@ -26,5 +26,20 @@ class TestRoleApplication(unittest.TestCase):
         assert Role_Application.create_role_application(self, Role_Application5.Role_Listing_ID, Role_Application5.Staff_ID) == "Error: Role Application already exists."
         assert Role_Application4.delete_role_application() == True
 
+    # def test_create_Role_Application_empty_Role_Listing_ID(self):
+    #     Role_Application6 = Role_Application("",1)
+    #     assert Role_Application6.create_role_application() == "Error: One or more fields are empty."
+
+    # def test_create_Role_Application_empty_Staff_ID(self):
+    #     Role_Application7 = Role_Application(1,"")
+    #     assert Role_Application7.create_role_application() == "Error: One or more fields are empty."
+
+    # def test_create_Role_Application_null_Role_Listing_ID(self):
+    #     Role_Application8 = Role_Application(None,1)
+    #     assert Role_Application8.create_role_application() == "Error: One or more fields are empty."
+
+    # def test_create_Role_Application_null_Staff_ID(self):
+    #     Role_Application9 = Role_Application(1,None)
+    #     assert Role_Application9.create_role_application() == "Error: One or more fields are empty."
 
     
