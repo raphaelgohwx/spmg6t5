@@ -18,8 +18,11 @@
 - SQL Workbench
 
 ### Database Setup
-1. Open SQL Workbench
-2.
+The backend application uses a AWS RDS MySQL server for data persistence. To create and connect your own AWS RDS Mysql instance, refer to AWS's documentation here: https://aws.amazon.com/getting-started/hands-on/create-mysql-db/
+1. Set up AWS RDS MySQL instance
+2. Open MySQL workbench, load AWS RDS MySQL details
+3. Once MySQL is connected, update account details in creds.py
+4. cd into backend, run setup_sql.py to populate MySQL database
 
 ### Install Dependencies
 ```
@@ -40,6 +43,10 @@ On a new terminal:
 $ cd backend
 $ python app.py
 ```
+
+### Run pytests
+1. cd into root folder
+2. run python -m pytest to run all unit tests
 
 ## Usage
 ### Happy Path
