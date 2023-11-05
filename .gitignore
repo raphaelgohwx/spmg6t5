@@ -1,2 +1,4 @@
 creds.py
 .env
+backend/creds.py
+tests/creds.py
