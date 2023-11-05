@@ -44,6 +44,10 @@ $ cd backend
 $ python app.py
 ```
 
+### Run pytests
+1. cd into root folder
+2. run python -m pytest to run all unit tests
+
 ## Usage
 ### Happy Path
 1. Log into
