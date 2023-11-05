@@ -96,3 +96,7 @@ class TestStaff(unittest.TestCase):
     def test_create_staff_null_Access_Rights(self):
         Staff4 = Staff(1, "Daryl", "Teo", "Junior Engineer", "Engineering Operation Division", "Singapore", "daryl@email.com", None)
         assert Staff4.create_staff() == False
+
+    def test_get_staff_skills_by_staff_id(self):
+        staff_skills = Staff.get_staff_skills_by_staff_id(self, 1)
+        assert staff_skills == ["Communication", "Creative Thinking", "Teamwork"]
