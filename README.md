@@ -19,10 +19,9 @@
 
 ### Database Setup
 The backend application uses a AWS RDS MySQL server for data persistence. To create and connect your own AWS RDS Mysql instance, refer to AWS's documentation here: https://aws.amazon.com/getting-started/hands-on/create-mysql-db/
-1. Set up AWS RDS MySQL instance
-2. Open MySQL workbench, load AWS RDS MySQL details
-3. Once MySQL is connected, update account details in creds.py
-4. cd into backend, run setup_sql.py to populate MySQL database
+1. Open MySQL workbench, set up new connection using AWS RDS MySQL endpoint details
+2. Once MySQL is connected, update account details in creds.py
+3. cd into backend, run setup_sql.py to populate MySQL database
 
 ### Install Dependencies
 ```
