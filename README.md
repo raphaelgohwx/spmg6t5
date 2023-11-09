@@ -10,7 +10,7 @@
   - [Install Dependencies](#install-dependencies)
   - [Launching the Webpage](#launching-the-webpage)
   - [Running the Backend](#running-the-backend)
-- [Usage](#usage)
+  - [Run pytests](#run-pytest)
 
 ## Setup
 ### Pre-Requisites
@@ -48,6 +48,4 @@ $ python app.py
 1. cd into root folder
 2. run python -m pytest to run all unit tests
 
-## Usage
-### Happy Path
-1. Log into
+
