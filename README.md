@@ -1,7 +1,5 @@
 # Introduction
-- Add your project logo.
-- Write a short introduction to the project.
-- If you are using badges, add them here.
+The Skill-Based Role Portal (SBRP) empowers users with various roles, namely Human Resource Personnel, Managers, and Staff, to perform specific actions in line with their access permissions. Human Resource Personnel can assess the skills of role applicants, while Staff members can browse and refine role listings based on their search preferences and submit applications for roles that pique their interest. Furthermore, the system offers a feature called Role-Skill Match, which illustrates the alignment and gaps between role requirements and the current skillsets of Staff members as a percentage.
 
 ## Index
 - [Setup](#setup)
